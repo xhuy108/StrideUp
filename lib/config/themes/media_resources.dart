@@ -28,6 +28,7 @@ class MediaResource {
   static const activeShopIcon = '$_baseIcons/activeShopIcon.svg';
 
   static const profileIcon = '$_baseIcons/profileIcon.svg';
+  static const activeProfileIcon = '$_baseIcons/activeProfileIcon.svg';
 
   static const luckIcon = '$_baseIcons/luckIcon.svg';
   static const energyIcon = '$_baseIcons/energyIcon.svg';

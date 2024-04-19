@@ -92,8 +92,8 @@ class NavigationMenu extends StatelessWidget {
                 ),
                 NavigationItem(
                   icon: MediaResource.profileIcon,
-                  activeIcon: MediaResource.profileIcon,
-                  title: 'Account',
+                  activeIcon: MediaResource.activeProfileIcon,
+                  title: 'Profile',
                   isActive: state == 4,
                   onTap: () {
                     context.read<NavigationCubit>().selectItem(4);

@@ -58,131 +58,31 @@ class _ActivityPageState extends State<ActivityPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          CardItem(
-                            height: 166.h,
+                          ActivityCardItem(
                             backgroundColor: AppPalette.secondary,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 32.w,
-                                  height: 32.h,
-                                  padding: EdgeInsets.all(6.r),
-                                  decoration: BoxDecoration(
-                                    color: AppPalette.primary,
-                                    borderRadius: BorderRadius.circular(8.r),
-                                  ),
-                                  child:
-                                      SvgPicture.asset(MediaResource.routeIcon),
-                                ),
-                                Gap(10.h),
-                                Text(
-                                  '0.02',
-                                  style: TextStyle(
-                                    fontSize: 28.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppPalette.background,
-                                  ),
-                                ),
-                                Gap(4.h),
-                                Text(
-                                  'Walking + Running Distance (km)',
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppPalette.background,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            isLargeCard: true,
+                            icon: MediaResource.routeIcon,
+                            iconBackgroundColor: AppPalette.primary,
+                            value: '0.02',
+                            subtitle: 'Walking + Running Distance (km)',
+                            subtitleColor: Colors.white,
+                            valueColor: Colors.white,
                           ),
                           Gap(12.h),
-                          CardItem(
-                            height: 110.h,
+                          ActivityCardItem(
                             backgroundColor: const Color(0xFFE3E4FF),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      '4:10',
-                                      style: TextStyle(
-                                        fontSize: 28.sp,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppPalette.textPrimary,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Container(
-                                      width: 32.w,
-                                      height: 32.h,
-                                      padding: EdgeInsets.all(6.r),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF8769FF),
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      child: SvgPicture.asset(
-                                          MediaResource.averageSpeedIcon),
-                                    ),
-                                  ],
-                                ),
-                                Gap(6.h),
-                                Text(
-                                  'Your average speed (min/km)',
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: const Color(0xFF3D3D3D),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            value: '4:10',
+                            icon: MediaResource.averageSpeedIcon,
+                            iconBackgroundColor: const Color(0xFF8769FF),
+                            subtitle: 'Your average speed (min/km)',
                           ),
                           Gap(12.h),
-                          CardItem(
-                            height: 110.h,
+                          ActivityCardItem(
                             backgroundColor: const Color(0xFFFFEEE8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      '0',
-                                      style: TextStyle(
-                                        fontSize: 28.sp,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppPalette.textPrimary,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Container(
-                                      width: 32.w,
-                                      height: 32.h,
-                                      padding: EdgeInsets.all(6.r),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFFF7070),
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      child: SvgPicture.asset(
-                                        MediaResource.heartRateIcon,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Gap(6.h),
-                                Text(
-                                  'Your total heart rate',
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: const Color(0xFF3D3D3D),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            value: '0',
+                            icon: MediaResource.heartRateIcon,
+                            iconBackgroundColor: const Color(0xFFFF7070),
+                            subtitle: 'Your total heart rate',
                           ),
                         ],
                       ),
@@ -192,134 +92,29 @@ class _ActivityPageState extends State<ActivityPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          CardItem(
-                            height: 110.h,
+                          ActivityCardItem(
                             backgroundColor: const Color(0xFFFFF5E3),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      '01',
-                                      style: TextStyle(
-                                        fontSize: 28.sp,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppPalette.textPrimary,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Container(
-                                      width: 32.w,
-                                      height: 32.h,
-                                      padding: EdgeInsets.all(6.r),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFFFCB44),
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      child: SvgPicture.asset(
-                                        MediaResource.activeDayIcon,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Gap(6.h),
-                                Text(
-                                  'Your active day of month',
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: const Color(0xFF3D3D3D),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            value: '01',
+                            icon: MediaResource.activeDayIcon,
+                            iconBackgroundColor: const Color(0xFFFFCB44),
+                            subtitle: 'Your active day of week',
                           ),
                           Gap(12.h),
-                          CardItem(
-                            height: 166.h,
+                          ActivityCardItem(
                             backgroundColor: const Color(0xFFF7F7F7),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 32.w,
-                                  height: 32.h,
-                                  padding: EdgeInsets.all(6.r),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF555555),
-                                    borderRadius: BorderRadius.circular(8.r),
-                                  ),
-                                  child: SvgPicture.asset(
-                                    MediaResource.activeTimeIcon,
-                                  ),
-                                ),
-                                Gap(10.h),
-                                Text(
-                                  '0.02',
-                                  style: TextStyle(
-                                    fontSize: 28.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: const Color(0xFF3D3D3D),
-                                  ),
-                                ),
-                                Gap(4.h),
-                                Text(
-                                  'Your active times',
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: const Color(0xFF3D3D3D),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            isLargeCard: true,
+                            value: '0.02',
+                            icon: MediaResource.activeTimeIcon,
+                            iconBackgroundColor: const Color(0xFF555555),
+                            subtitle: 'Your active times',
                           ),
                           Gap(12.h),
-                          CardItem(
-                            height: 110.h,
+                          ActivityCardItem(
                             backgroundColor: const Color(0xFFEAFFE8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      '0',
-                                      style: TextStyle(
-                                        fontSize: 28.sp,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppPalette.textPrimary,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Container(
-                                      width: 32.w,
-                                      height: 32.h,
-                                      padding: EdgeInsets.all(6.r),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF82F58E),
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      child: SvgPicture.asset(
-                                        MediaResource.activeDayIcon,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Gap(6.h),
-                                Text(
-                                  'Your total steps (step/min)',
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: const Color(0xFF3D3D3D),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            value: '0',
+                            icon: MediaResource.stepIcon,
+                            iconBackgroundColor: const Color(0xFF82F58E),
+                            subtitle: 'Your total steps (step/min)',
                           ),
                         ],
                       ),
