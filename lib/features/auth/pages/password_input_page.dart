@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
+import 'package:stride_up/core/common/widgets/navigation_menu.dart';
 import 'package:stride_up/features/auth/widgets/auth_button.dart';
 import 'package:stride_up/features/auth/widgets/auth_input_field.dart';
 import 'package:stride_up/features/auth/widgets/skip_button.dart';
@@ -77,7 +78,7 @@ class _PasswordInputPageState extends State<PasswordInputPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const HomePage(),
+                    builder: (context) => NavigationMenu(),
                   ),
                 );
               },

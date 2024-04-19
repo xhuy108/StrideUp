@@ -4,7 +4,7 @@ class AppPalette {
   static const background = Color(0xFFFFFFFF);
 
   static const primary = Color(0xFFF75A28);
-  static const secondary = Color(0xFFF2F2F2);
+  static const secondary = Color(0xFFFF794E);
 
   static const textPrimary = Color(0xFF000000);
   static const textSecondary = Color(0xFFA8A8A8);
