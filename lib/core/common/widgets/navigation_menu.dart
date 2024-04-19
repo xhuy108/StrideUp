@@ -7,13 +7,12 @@ import 'package:stride_up/core/common/cubits/navigation_cubit/navigation_cubit.d
 import 'package:stride_up/core/common/widgets/navigation_item.dart';
 import 'package:stride_up/features/activity/pages/activity_page.dart';
 import 'package:stride_up/features/home/pages/home_page.dart';
+import 'package:stride_up/features/running/pages/running_page.dart';
 
 List<Widget> pages = [
   const HomePage(),
   const ActivityPage(),
-  Container(
-    color: Colors.green,
-  ),
+  const RunningPage(),
   Container(
     color: Colors.blue,
   ),
