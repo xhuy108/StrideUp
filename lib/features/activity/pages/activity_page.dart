@@ -127,7 +127,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     ),
                   ),
                 ),
-                Gap(50.h),
+                Gap(30.h),
                 Row(
                   children: [
                     Expanded(

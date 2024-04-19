@@ -65,6 +65,23 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: SvgPicture.asset(
+                            MediaResource.notificationIcon,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: SvgPicture.asset(
+                            MediaResource.settingIcon,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
                 Gap(28.h),

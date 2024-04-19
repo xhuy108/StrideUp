@@ -4,6 +4,10 @@ class MediaResource {
   //ICON
   static const _baseIcons = 'assets/icons';
 
+  //Common
+  static const coinIcon = '$_baseIcons/coinIcon.svg';
+
+  //Auth Page
   static const helpIcon = '$_baseIcons/helpIcon.svg';
   static const phoneIcon = '$_baseIcons/phoneIcon.svg';
   static const googleIcon = '$_baseIcons/googleIcon.svg';
@@ -13,8 +17,7 @@ class MediaResource {
 
   static const showPasswordIcon = '$_baseIcons/showPasswordIcon.svg';
 
-  static const coinIcon = '$_baseIcons/coinIcon.svg';
-
+  //Navigation Menu
   static const homeIcon = '$_baseIcons/homeIcon.svg';
   static const activeHomeIcon = '$_baseIcons/activeHomeIcon.svg';
 
@@ -30,9 +33,13 @@ class MediaResource {
   static const profileIcon = '$_baseIcons/profileIcon.svg';
   static const activeProfileIcon = '$_baseIcons/activeProfileIcon.svg';
 
+  //Home Page
   static const luckIcon = '$_baseIcons/luckIcon.svg';
   static const energyIcon = '$_baseIcons/energyIcon.svg';
+  static const notificationIcon = '$_baseIcons/notificationIcon.svg';
+  static const settingIcon = '$_baseIcons/settingIcon.svg';
 
+  //Activity Page
   static const calendarIcon = '$_baseIcons/calendarIcon.svg';
   static const activeDayIcon = '$_baseIcons/activeDayIcon.svg';
   static const activeTimeIcon = '$_baseIcons/activeTimeIcon.svg';
