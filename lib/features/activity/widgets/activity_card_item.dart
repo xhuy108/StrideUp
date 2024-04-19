@@ -9,12 +9,12 @@ class ActivityCardItem extends StatelessWidget {
     super.key,
     required this.backgroundColor,
     required this.subtitle,
+    this.subtitleColor = const Color(0xFF3D3D3D),
     required this.value,
+    this.valueColor = AppPalette.textPrimary,
     required this.icon,
     required this.iconBackgroundColor,
     this.isLargeCard = false,
-    this.subtitleColor = const Color(0xFF3D3D3D),
-    this.valueColor = AppPalette.textPrimary,
   });
 
   final Color backgroundColor;

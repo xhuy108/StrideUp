@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
-import 'package:stride_up/features/activity/widgets/card_item.dart';
+import 'package:stride_up/features/activity/widgets/activity_card_item.dart';
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
@@ -51,7 +51,83 @@ class _ActivityPageState extends State<ActivityPage> {
                     color: AppPalette.textPrimary,
                   ),
                 ),
-                Gap(30.h),
+                Gap(20.h),
+                EasyDateTimeLine(
+                  initialDate: DateTime.now(),
+                  onDateChange: (selectedDate) {
+                    //`selectedDate` the new date selected.
+                  },
+                  headerProps: const EasyHeaderProps(
+                    showHeader: false,
+                  ),
+                  dayProps: EasyDayProps(
+                    height: 90.h,
+                    dayStructure: DayStructure.dayStrDayNum,
+                    todayStyle: DayStyle(
+                      splashBorder: BorderRadius.circular(100.r),
+                      dayStrStyle: TextStyle(
+                        fontSize: 16.sp,
+                        color: const Color(0xFF666464),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      dayNumStyle: TextStyle(
+                        fontSize: 16.sp,
+                        color: const Color(0xFF666464),
+                        fontWeight: FontWeight.w700,
+                      ),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppPalette.secondary,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                    inactiveDayStyle: DayStyle(
+                      splashBorder: BorderRadius.circular(100.r),
+                      dayStrStyle: TextStyle(
+                        fontSize: 16.sp,
+                        color: const Color(0xFF666464),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      dayNumStyle: TextStyle(
+                        fontSize: 16.sp,
+                        color: const Color(0xFF666464),
+                        fontWeight: FontWeight.w700,
+                      ),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.transparent,
+                      ),
+                    ),
+                    activeDayStyle: DayStyle(
+                      splashBorder: BorderRadius.circular(100.r),
+                      dayStrStyle: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                      dayNumStyle: TextStyle(
+                        fontSize: 16.sp,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppPalette.primary,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppPalette.primary.withOpacity(0.3),
+                            spreadRadius: 6.r,
+                            blurRadius: 6.r,
+                            offset: const Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Gap(50.h),
                 Row(
                   children: [
                     Expanded(
