@@ -27,11 +27,6 @@ class _RunningPageState extends State<RunningPage> {
   );
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -57,7 +52,7 @@ class _RunningPageState extends State<RunningPage> {
                 gradient: LinearGradient(
                   colors: [
                     AppPalette.background.withOpacity(0.9),
-                    AppPalette.background.withOpacity(0.2),
+                    AppPalette.background.withOpacity(0.1),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
