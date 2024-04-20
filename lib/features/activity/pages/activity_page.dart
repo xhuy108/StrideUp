@@ -62,6 +62,7 @@ class _ActivityPageState extends State<ActivityPage> {
                   ),
                   dayProps: EasyDayProps(
                     height: 90.h,
+                    width: 70.w,
                     dayStructure: DayStructure.dayStrDayNum,
                     todayStyle: DayStyle(
                       splashBorder: BorderRadius.circular(100.r),
