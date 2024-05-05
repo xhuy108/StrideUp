@@ -1,23 +1,50 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:stride_up/background_service/background_server_notifaction.dart';
+import 'package:stride_up/background_service/constant_service.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:stride_up/features/home/widgets/award_item.dart';
 import 'package:stride_up/features/home/widgets/shoes_information_tag.dart';
+import 'package:stride_up/utils/permission_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState(){
+    super.initState();
+    initalizeRequestPermission();
+  }
+  Future<void> initalizeRequestPermission() async
+  {
+    await PermissionService.requestLocationPermission();
+    await PermissionService.requestNotificationPermission();
+    await PermissionService.requestPedometerPermission();
+    await initializeNotificationService();
+    
+  }
+  Future<void> initNotification() async{
+    Map<String, dynamic> data = {
+      'context': context,
+    };
+    
+      FlutterBackgroundService().invoke(ServiceMethod.START_NOTIFICATION_SERVICE,data);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
