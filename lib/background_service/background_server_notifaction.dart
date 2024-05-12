@@ -37,6 +37,9 @@ void onStart(ServiceInstance service) async{
   service.on('stopService').listen((event) {
     service.stopSelf();
   });
+  service.on(ServiceMethod.CHECK_LOCATION_SERVICE).listen((event)async {
+    await checkLocationChanged();
+  });
   service.on(ServiceMethod.START_LOCATION_SERVICE).listen((event) async{
     await startLocationService();
   });
