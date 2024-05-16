@@ -4,44 +4,40 @@ import 'dart:async';
 import 'package:flutter_map_math/flutter_geo_math.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pedometer/pedometer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stride_up/utils/singleton.dart';
-import 'package:stride_up/utils/pref_constant.dart';
-
+import '../utils/pref_constant.dart';
+import '../utils/running_position.dart';
+import '../utils/singleton.dart' ;
+import 'dart:convert';
+Stream<RunningStatus>? running_status_stream;
 StreamSubscription<Position>? _positionStreamSubscription;
 final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
 
-class RunningPosition{
-  static List<LatLng> polylineCurrent = [];
-  static bool isStartRunning = false;
-  static Timer? runningTimer;
-  static int currentTime = 0;
-  static int distanceRun = 0;
-  static LatLng? currentPostion;
-}
 Future<void> startLocationService() async {
-    if (!RunningPosition.isStartRunning) {
-    var currentPoint = await Geolocator.getCurrentPosition();
-    RunningPosition.currentPostion = LatLng(currentPoint.latitude, currentPoint.longitude);
-    RunningPosition.polylineCurrent.add(RunningPosition.currentPostion!);
-    Singleton.instanceLogger.d('location state: ${RunningStatus.RESUMED}');
     final SharedPreferences preferences = await SharedPreferences.getInstance();
+    if (!runningPosistion.isStartRunning) {
+    var currentPoint = await Geolocator.getCurrentPosition();
+    runningPosistion.currentPostion = LatLng(currentPoint.latitude, currentPoint.longitude);
+    runningPosistion.polylineCurrent.add(runningPosistion.currentPostion!);
     preferences.setBool(PREF_RUNNING_STATUS, true);
-    RunningPosition.runningTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      preferences.setInt(PREF_RUNNING_TIMER, ++RunningPosition.currentTime);
+    runningPosistion.runningTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      preferences.setInt(PREF_RUNNING_TIMER, ++runningPosistion.currentTime);
     });
     if (_positionStreamSubscription == null) {
       final positionStream = _geolocatorPlatform.getPositionStream();
       _positionStreamSubscription = positionStream.handleError(errorLocationChange)
       .listen((position) {
-        double distanceCheck = FlutterMapMath().distanceBetween(position.latitude, position.longitude, RunningPosition.polylineCurrent.last.latitude, RunningPosition.polylineCurrent.last.longitude,"meters");
-          if(distanceCheck>5)
+        preferences.setDouble(PREF_LATITUDE, position.latitude);
+        preferences.setDouble(PREF_LONGITUDE, position.longitude);
+        double distanceCheck = FlutterMapMath().distanceBetween(position.latitude, position.longitude, runningPosistion.polylineCurrent.last.latitude, runningPosistion.polylineCurrent.last.longitude,"meters");
+          if(distanceCheck>3)
           {
-              RunningPosition.currentPostion = LatLng(position.latitude, position.longitude);
-              preferences.setDouble(PREF_LATITUDE, position.latitude);
-              preferences.setDouble(PREF_LONGITUDE, position.longitude);
-              RunningPosition.polylineCurrent.add(LatLng(position.latitude, position.longitude));
-              RunningPosition.distanceRun += distanceCheck.toInt();
+              runningPosistion.currentPostion = LatLng(position.latitude, position.longitude);
+              runningPosistion.polylineCurrent.add(LatLng(position.latitude, position.longitude));
+              preferences.setString(PREF_LOCATION_CHECK_POINT, jsonEncode(runningPosistion.polylineCurrent));
+              runningPosistion.distanceRun += distanceCheck.toInt();
+              preferences.setInt(PREF_RUNNING_DISTANCE,runningPosistion.distanceRun);
           }
       });
       _positionStreamSubscription!.pause();
@@ -50,28 +46,32 @@ Future<void> startLocationService() async {
         return;
     }
       _positionStreamSubscription!.resume();
-      RunningPosition.isStartRunning = true;
-        preferences.setString(PREF_RACING_STATUS, RunningStatus.RESUMED);
-      } 
+      Singleton.instanceLogger.d('location state: ${RunningStatus.RESUMED}');
+      runningPosistion.isStartRunning = true;
+      }
+
  }
  Future<void> stopLocationService() async{
-  if(RunningPosition.isStartRunning && _positionStreamSubscription!=null){
+  if(runningPosistion.isStartRunning && _positionStreamSubscription!=null){
     final SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (RunningPosition.runningTimer != null) {
-      RunningPosition.runningTimer!.cancel();
-      RunningPosition.runningTimer = null;
-      RunningPosition.currentTime = 0;
+    if (runningPosistion.runningTimer != null) {
+      runningPosistion.runningTimer!.cancel();
+      runningPosistion.runningTimer = null;
+      runningPosistion.currentTime = 0;
       preferences.setInt(PREF_RUNNING_TIMER, 0);
       preferences.setBool(PREF_RUNNING_STATUS, false);
+      preferences.remove(PREF_RUNNING_TIMER);
+      preferences.remove(PREF_LOCATION_CHECK_POINT);
+      preferences.remove(PREF_RUNNING_DISTANCE);
+      preferences.remove(PREF_RACING_STATUS);
     }
     Singleton.instanceLogger.d('location state: ${RunningStatus.PAUSED}');
     _positionStreamSubscription!.pause();
-    preferences.setString(PREF_RACING_STATUS, RunningStatus.PAUSED);
-    RunningPosition.isStartRunning = !RunningPosition.isStartRunning;
-    RunningPosition.polylineCurrent.clear();
-    RunningPosition.distanceRun = 0;
-    preferences.remove(PREF_LATITUDE);
-    preferences.remove(PREF_LONGITUDE);
+    Singleton.runningStatusController.sink.add(RunningStatus.PAUSED);
+    runningPosistion.isStartRunning = false;
+    runningPosistion.polylineCurrent.clear();
+    runningPosistion.distanceRun = 0;
+
     preferences.remove(PREF_RUNNING_DISTANCE);
   }
 }
@@ -81,14 +81,28 @@ Future<void> startLocationService() async {
     _positionStreamSubscription = null;
     sharedPreferences.remove(PREF_LATITUDE);
     sharedPreferences.remove(PREF_LONGITUDE);
-    RunningPosition.isStartRunning = false;
-    RunningPosition.distanceRun = 0;
-    RunningPosition.polylineCurrent.clear();
+    sharedPreferences.remove(PREF_RUNNING_TIMER);
+    sharedPreferences.remove(PREF_LOCATION_CHECK_POINT);
+    sharedPreferences.remove(PREF_RUNNING_DISTANCE);
+    sharedPreferences.remove(PREF_RACING_STATUS);
+    runningPosistion.isStartRunning = false;
+    runningPosistion.distanceRun = 0;
+    runningPosistion.polylineCurrent.clear();
     Singleton.instanceLogger.e('LocationError: $error');
  }
- class RunningStatus{
+ Future<void> checkLocationChanged()async {
+    if(!runningPosistion.isStartRunning) {
+      SharedPreferences  sharedPreferences =  await SharedPreferences.getInstance(); 
+      sharedPreferences.remove(PREF_RUNNING_TIMER);
+      sharedPreferences.remove(PREF_LOCATION_CHECK_POINT);
+      sharedPreferences.setBool(PREF_RUNNING_STATUS, false);
+      sharedPreferences.remove(PREF_RACING_STATUS);
+    }
+
+ }
+ enum RunningStatus{
   // ignore: constant_identifier_names
-  static const String RESUMED = 'resumed';
-  static const String PAUSED = 'paused';
+  RESUMED ,
+  PAUSED 
 
  }
