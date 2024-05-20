@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "19643724169",
+    "project_id": "strideup-94d1a",
+    "storage_bucket": "strideup-94d1a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19643724169:android:824c96501596fb0994b158",
+        "android_client_info": {
+          "package_name": "com.example.stride_up"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7S22TVErtc3kPMB26kHkMkfRVuQxxi78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
