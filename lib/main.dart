@@ -1,15 +1,33 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/core/common/cubits/navigation_cubit/navigation_cubit.dart';
+import 'package:stride_up/core/common/widgets/navigation_menu.dart';
+import 'package:stride_up/features/auth/bloc/auth_bloc.dart';
 import 'package:stride_up/features/auth/pages/email_input_page.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'package:stride_up/features/auth/repositories/auth_repository.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
         create: (_) => NavigationCubit(),
+      ),
+      BlocProvider(
+        create: (_) => AuthBloc(
+          authRepository: const AuthRepository(),
+        ),
       ),
     ],
     child: const MyApp(),
@@ -34,7 +52,16 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: Colors.white,
             fontFamily: GoogleFonts.poppins().fontFamily,
           ),
-          home: const EmailInputPage(),
+          home: StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (ctx, snapshot) {
+              if (snapshot.hasData) {
+                return const NavigationMenu();
+              }
+
+              return const EmailInputPage();
+            },
+          ),
         );
       },
     );

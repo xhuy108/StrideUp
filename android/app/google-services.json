@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "19643724169",
+    "project_id": "strideup-94d1a",
+    "storage_bucket": "strideup-94d1a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19643724169:android:824c96501596fb0994b158",
+        "android_client_info": {
+          "package_name": "com.example.stride_up"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "19643724169-so98pfutmolo1428ep4sl527r60576ph.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.stride_up",
+            "certificate_hash": "bcdc2a31700e9576ecc189db31003b1bde8c49db"
+          }
+        },
+        {
+          "client_id": "19643724169-69kovr0qa9kbu5dbgkcdkvoa0nltfmf5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7S22TVErtc3kPMB26kHkMkfRVuQxxi78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19643724169-69kovr0qa9kbu5dbgkcdkvoa0nltfmf5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "19643724169-b4etihoevm030ec7g2qt03t03mq2sjvc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.strideUp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
