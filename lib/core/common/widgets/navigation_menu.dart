@@ -103,7 +103,10 @@ class NavigationMenu extends StatelessWidget {
           },
         ),
       ),
-      body: pages[context.watch<NavigationCubit>().state],
+      body: IndexedStack(
+        index: context.watch<NavigationCubit>().state,
+        children: pages,
+      ),
     );
   }
 }
