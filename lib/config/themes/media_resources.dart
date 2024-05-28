@@ -38,6 +38,7 @@ class MediaResource {
   static const energyIcon = '$_baseIcons/energyIcon.svg';
   static const notificationIcon = '$_baseIcons/notificationIcon.svg';
   static const settingIcon = '$_baseIcons/settingIcon.svg';
+  static const searchIcon = '$_baseIcons/searchIcon.svg';
 
   //Activity Page
   static const calendarIcon = '$_baseIcons/calendarIcon.svg';
