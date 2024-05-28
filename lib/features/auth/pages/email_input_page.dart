@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:gap/gap.dart';
+import 'package:stride_up/features/auth/bloc/auth_bloc.dart';
 import 'package:stride_up/features/auth/pages/phone_input_page.dart';
 import 'package:stride_up/features/auth/widgets/auth_button.dart';
 import 'package:stride_up/features/auth/widgets/auth_input_field.dart';
@@ -18,6 +22,8 @@ class EmailInputPage extends StatefulWidget {
 
 class _EmailInputPageState extends State<EmailInputPage> {
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +68,32 @@ class _EmailInputPageState extends State<EmailInputPage> {
                 controller: _emailController,
               ),
               Gap(20.h),
+              AuthInputField(
+                hintText: 'Password',
+                keyboardType: TextInputType.visiblePassword,
+                controller: _passwordController,
+                obscureText: _isObscure,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isObscure = !_isObscure;
+                    });
+                  },
+                  icon: SvgPicture.asset(
+                    MediaResource.showPasswordIcon,
+                  ),
+                ),
+              ),
+              Gap(20.h),
               AuthButton(
                 title: 'Continue',
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PhoneInputPage(),
-                    ),
-                  );
+                  context.read<AuthBloc>().add(
+                        AuthSignUpWithEmailEvent(
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                        ),
+                      );
                 },
               ),
               Gap(20.h),
@@ -109,14 +132,6 @@ class _EmailInputPageState extends State<EmailInputPage> {
                   MediaResource.googleIcon,
                 ),
                 title: 'Continue with Google',
-                onPressed: () {},
-              ),
-              Gap(15.h),
-              SocialButton(
-                icon: SvgPicture.asset(
-                  MediaResource.appleIcon,
-                ),
-                title: 'Continue with Apple',
                 onPressed: () {},
               ),
             ],
