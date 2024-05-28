@@ -31,153 +31,23 @@ class _RunningPageState extends State<RunningPage> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   late SharedPreferences preferences;
-  bool isRunning = false;
-  late int timeCount;
-  Timer? timer;
-  String distanceRunText = '0 M';
-  String timeText = '0:0:0';
-  int currentDistance = 0;
   LatLng? currentLocation;
   final service = FlutterBackgroundService();
   Map<PolylineId, Polyline> polylines = {};
   final polylineId = PolylineId('polyline');
   CameraPosition? currentLocationCamera;
-  late Stream<RunningStatus> runningStatusController;
-  late StreamSubscription<RunningStatus> runningStatusSubscription;
   @override
   void initState() {
     super.initState();
-    initalizeRunningPage();
+    getCurrentLocation();
   }
-
-  Future<void> initalizeRunningPage() async {
-    preferences = await SharedPreferences.getInstance();
-    timeCount = runningPosistion.currentTime;
-    Position firstPosition = await Geolocator.getCurrentPosition();
+  Future<void> getCurrentLocation() async{
+    Position position =  await Geolocator.getCurrentPosition();
     setState(() {
-      currentLocation = LatLng(firstPosition.latitude, firstPosition.longitude);
-      currentLocationCamera =
-          CameraPosition(target: currentLocation!, zoom: 15);
-      isRunning = preferences.getBool(PREF_RUNNING_STATUS) ?? false;
-    });
-    if (preferences.getBool(PREF_RUNNING_STATUS) ?? false) {
-      await listenLocationRunning();
-    }
-
-    service.invoke(ServiceMethod.CHECK_LOCATION_SERVICE);
-    runningStatusController = Singleton.runningStatusController.stream;
-    runningStatusSubscription = runningStatusController.listen((event) async {
-      if (event == RunningStatus.PAUSED) {
-        setState(() {
-          isRunning = false;
-        });
-        await stopListenLocationRunning();
-      } else {
-        setState(() {
-          isRunning = true;
-        });
-        await listenLocationRunning();
-      }
-    });
-    runningStatusSubscription.resume();
-  }
-
-  Future<void> listenLocationRunning() async {
-    timer = Timer.periodic(const Duration(milliseconds: 400), (timer) async {
-      await preferences.reload();
-      if (!(preferences.getBool(PREF_RUNNING_STATUS) ?? false)) {
-        timer.cancel();
-        setState(() {
-          isRunning = false;
-          timeText = convertTimeToString(0);
-        });
-        await generatePolylineFromPoints([]);
-        return;
-      }
-      var latitude = preferences.getDouble(PREF_LATITUDE);
-      var longitude = preferences.getDouble(PREF_LONGITUDE);
-      var time = preferences.getInt(PREF_RUNNING_TIMER);
-      setState(() {
-        timeText = convertTimeToString(time ?? 0);
-      });
-      if (latitude != null && longitude != null) {
-        if (currentLocation!.latitude != latitude &&
-            currentLocation!.longitude != longitude) {
-          String? jsonString = preferences.getString(PREF_LOCATION_CHECK_POINT);
-          List<LatLng> latLngList = [];
-          List<dynamic> dynamicListFromSharedPreferences =
-              jsonString != null ? jsonDecode(jsonString) : [];
-          latLngList = dynamicListFromSharedPreferences.map((dynamic item) {
-            // Ở đây, bạn cần xác định cách chuyển đổi từ mỗi phần tử dynamic sang LatLng
-            // Ví dụ: giả sử mỗi phần tử dynamic là một List có 2 phần tử là latitude và longitude
-            double latitude = item[0];
-            double longitude = item[1];
-            return LatLng(latitude, longitude);
-          }).toList();
-          setState(() {
-            currentLocation = LatLng(latitude, longitude);
-            currentDistance = preferences.getInt(PREF_RUNNING_DISTANCE) ?? 0;
-            distanceRunText = convertRunningDistanceToString(currentDistance);
-          });
-          await generatePolylineFromPoints(latLngList);
-        }
-      }
+      currentLocation = LatLng(position.latitude, position.longitude);
+      currentLocationCamera = CameraPosition(target: currentLocation!,zoom: 15);
     });
   }
-
-  Future<void> stopListenLocationRunning() async {
-    /* 
-    Lưu data ở đây 
-    */
-    // Xoá data
-    if (timer != null) {
-      timer!.cancel();
-      timer = null;
-    }
-    setState(() {
-      timeText = convertTimeToString(0);
-      distanceRunText = convertRunningDistanceToString(0);
-      currentDistance = 0;
-    });
-    await generatePolylineFromPoints(runningPosistion.polylineCurrent);
-  }
-
-  String convertTimeToString(int time) {
-    int hour = (time / 3600).floor();
-    int min = ((time - hour * 3600) / 60).floor();
-    int seconds = time - hour * 3600 - min * 60;
-    return '$hour:$min:$seconds';
-  }
-
-  String convertRunningDistanceToString(int distance) {
-    if (distance < 1000) {
-      return '$distance M';
-    }
-    return '${(distance / 1000).toDouble()} KM';
-  }
-
-  Future<void> startRunning() async {
-    Singleton.runningStatusController.sink.add(RunningStatus.RESUMED);
-    service.invoke(ServiceMethod.START_LOCATION_SERVICE);
-  }
-
-  Future<void> stopRunning() async {
-    Singleton.runningStatusController.sink.add(RunningStatus.PAUSED);
-    service.invoke(ServiceMethod.STOP_LOCATION_SERVICE);
-  }
-
-  Future<void> generatePolylineFromPoints(
-      List<LatLng> polylineCoordinates) async {
-    final polyline = Polyline(
-        polylineId: polylineId,
-        color: const Color.fromARGB(255, 247, 90, 40),
-        points: polylineCoordinates,
-        width: 5);
-    setState(() {
-      polylines[polylineId] = polyline;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -234,7 +104,7 @@ class _RunningPageState extends State<RunningPage> {
                               title: 'Time',
                             ),
                             RunningInformationItem(
-                              value: timeText,
+                              value: '00:00',
                               title: 'Time',
                             ),
                             RunningInformationItem(
@@ -245,7 +115,7 @@ class _RunningPageState extends State<RunningPage> {
                         ),
                         Gap(60.h),
                         Text(
-                          distanceRunText,
+                          '0.0KM',
                           style: TextStyle(
                             fontSize: 38.sp,
                             fontWeight: FontWeight.w700,
@@ -262,12 +132,6 @@ class _RunningPageState extends State<RunningPage> {
                     alignment: Alignment.bottomCenter,
                     child: InkWell(
                       onTap: () async {
-                        await preferences.reload();
-                        if (isRunning) {
-                          await stopRunning();
-                        } else {
-                          await startRunning();
-                        }
                       },
                       child: Container(
                         padding: EdgeInsets.all(20.r),
@@ -276,7 +140,7 @@ class _RunningPageState extends State<RunningPage> {
                           color: AppPalette.primary,
                         ),
                         child: Text(
-                          isRunning ? 'STOP' : 'RUN',
+                           'RUN',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.sp,
