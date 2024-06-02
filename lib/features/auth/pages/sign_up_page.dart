@@ -8,7 +8,7 @@ import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:gap/gap.dart';
 import 'package:stride_up/features/auth/bloc/auth_bloc.dart';
-import 'package:stride_up/features/auth/widgets/auth_button.dart';
+import 'package:stride_up/core/common/widgets/app_button.dart';
 import 'package:stride_up/features/auth/widgets/auth_input_field.dart';
 import 'package:stride_up/features/auth/widgets/social_button.dart';
 
@@ -86,7 +86,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
               Gap(20.h),
-              AuthButton(
+              AppButton(
                 title: 'Continue',
                 onPressed: () {
                   context.read<AuthBloc>().add(
