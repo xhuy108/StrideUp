@@ -8,14 +8,13 @@ import 'package:stride_up/core/common/widgets/navigation_item.dart';
 import 'package:stride_up/features/activity/pages/activity_page.dart';
 import 'package:stride_up/features/home/pages/home_page.dart';
 import 'package:stride_up/features/running/pages/running_page.dart';
+import 'package:stride_up/features/shop/pages/shop_page.dart';
 
 List<Widget> pages = [
   const HomePage(),
   const ActivityPage(),
   const RunningPage(),
-  Container(
-    color: Colors.blue,
-  ),
+  const ShopPage(),
   Container(
     color: Colors.yellow,
   ),
@@ -103,7 +102,10 @@ class NavigationMenu extends StatelessWidget {
           },
         ),
       ),
-      body: pages[context.watch<NavigationCubit>().state],
+      body: IndexedStack(
+        index: context.watch<NavigationCubit>().state,
+        children: pages,
+      ),
     );
   }
 }

@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:stride_up/features/auth/pages/password_input_page.dart';
-import 'package:stride_up/features/auth/widgets/auth_button.dart';
+import 'package:stride_up/core/common/widgets/app_button.dart';
 import 'package:stride_up/features/auth/widgets/auth_input_field.dart';
 import 'package:stride_up/features/auth/widgets/skip_button.dart';
 
@@ -65,7 +65,7 @@ class _NameInputPageState extends State<NameInputPage> {
               controller: _lastNameController,
             ),
             const Spacer(),
-            AuthButton(
+            AppButton(
               title: 'Continue',
               onPressed: () {
                 Navigator.push(

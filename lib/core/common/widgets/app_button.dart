@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 
-class AuthButton extends StatelessWidget {
-  const AuthButton({super.key, required this.title, this.onPressed});
+class AppButton extends StatelessWidget {
+  const AppButton({super.key, required this.title, this.onPressed});
 
   final String title;
   final void Function()? onPressed;
