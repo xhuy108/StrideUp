@@ -8,19 +8,18 @@ import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:gap/gap.dart';
 import 'package:stride_up/features/auth/bloc/auth_bloc.dart';
-import 'package:stride_up/features/auth/pages/phone_input_page.dart';
-import 'package:stride_up/features/auth/widgets/auth_button.dart';
+import 'package:stride_up/core/common/widgets/app_button.dart';
 import 'package:stride_up/features/auth/widgets/auth_input_field.dart';
 import 'package:stride_up/features/auth/widgets/social_button.dart';
 
-class EmailInputPage extends StatefulWidget {
-  const EmailInputPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<EmailInputPage> createState() => _EmailInputPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _EmailInputPageState extends State<EmailInputPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isObscure = true;
@@ -29,6 +28,8 @@ class _EmailInputPageState extends State<EmailInputPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: AppPalette.background,
+        backgroundColor: AppPalette.background,
         actions: [
           IconButton(
             onPressed: () {},
@@ -45,7 +46,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Welcome Back!',
+                'Welcome,',
                 style: TextStyle(
                   fontSize: 26.sp,
                   fontWeight: FontWeight.w600,
@@ -85,7 +86,7 @@ class _EmailInputPageState extends State<EmailInputPage> {
                 ),
               ),
               Gap(20.h),
-              AuthButton(
+              AppButton(
                 title: 'Continue',
                 onPressed: () {
                   context.read<AuthBloc>().add(
