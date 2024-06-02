@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/core/common/cubits/navigation_cubit/navigation_cubit.dart';
 import 'package:stride_up/core/common/widgets/navigation_menu.dart';
 import 'package:stride_up/features/auth/bloc/auth_bloc.dart';
-import 'package:stride_up/features/auth/pages/email_input_page.dart';
+import 'package:stride_up/features/auth/pages/sign_up_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:stride_up/features/auth/repositories/auth_repository.dart';
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
                 return const NavigationMenu();
               }
 
-              return const EmailInputPage();
+              return const SignUpPage();
             },
           ),
         );
