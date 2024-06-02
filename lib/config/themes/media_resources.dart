@@ -40,6 +40,8 @@ class MediaResource {
   static const settingIcon = '$_baseIcons/settingIcon.svg';
   static const searchIcon = '$_baseIcons/searchIcon.svg';
 
+  static const walletIcon = '$_baseIcons/walletIcon.svg';
+
   //Activity Page
   static const calendarIcon = '$_baseIcons/calendarIcon.svg';
   static const activeDayIcon = '$_baseIcons/activeDayIcon.svg';
@@ -49,9 +51,19 @@ class MediaResource {
   static const routeIcon = '$_baseIcons/routeIcon.svg';
   static const stepIcon = '$_baseIcons/stepIcon.svg';
 
+  //Wallet Page
+  static const receiveIcon = '$_baseIcons/receiveIcon.svg';
+  static const swapIcon = '$_baseIcons/swapIcon.svg';
+  static const transferIcon = '$_baseIcons/transferIcon.svg';
+  static const bnbIcon = '$_baseIcons/bnbIcon.svg';
+  static const gmtIcon = '$_baseIcons/gmtIcon.svg';
+  static const usdtIcon = '$_baseIcons/usdtIcon.svg';
+  static const walletWarningIcon = '$_baseIcons/walletWarningIcon.svg';
+
   //IMAGE
   static const _baseImages = 'assets/images';
 
   static const shoesBackground = '$_baseImages/shoesBackground.jpg';
   static const giftBox = '$_baseImages/gift.png';
+  static const walletBackground = '$_baseImages/walletBackground.png';
 }
