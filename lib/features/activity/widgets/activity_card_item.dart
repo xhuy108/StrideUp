@@ -29,7 +29,7 @@ class ActivityCardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: isLargeCard ? 166.h : 110.h,
+      height: isLargeCard ? 166.h : 120.h,
       padding: EdgeInsets.symmetric(
         horizontal: 12.w,
         vertical: 12.h,

@@ -45,7 +45,7 @@ class SearchField extends StatelessWidget {
         prefixIcon: Padding(
           padding: EdgeInsets.all(16.w),
           child: SvgPicture.asset(
-            MediaResource.settingIcon,
+            MediaResource.searchIcon,
           ),
         ),
         filled: true,
