@@ -9,15 +9,14 @@ import 'package:stride_up/features/activity/pages/activity_page.dart';
 import 'package:stride_up/features/home/pages/home_page.dart';
 import 'package:stride_up/features/running/pages/running_page.dart';
 import 'package:stride_up/features/shop/pages/shop_page.dart';
+import 'package:stride_up/features/profile/pages/profile_page.dart';
 
 List<Widget> pages = [
   const HomePage(),
   const ActivityPage(),
   const RunningPage(),
   const ShopPage(),
-  Container(
-    color: Colors.yellow,
-  ),
+  const ProfilePage(),
 ];
 
 class NavigationMenu extends StatelessWidget {
