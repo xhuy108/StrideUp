@@ -132,10 +132,10 @@ void _listenLocationChange() {
     });
     initTimer();
   }
-  void stopRunning()async{
+  void stopRunning()async {
     RunningRecord runningRecord = RunningRecord(userId: FirebaseAuth.instance.currentUser!.uid, distanceGo: currentDistance,
        locationGo: _route, time: timeCount, timeCreate: DateTime.now());
-    setState(() {
+    setState(() async{
       isRunning = false;
       timer!.cancel();
       timer = null;
@@ -152,7 +152,6 @@ void _listenLocationChange() {
 
     });
       final response = await runningReporsitory.upRunningStatus(runningRecord);
-
   }
   @override
   Widget build(BuildContext context) {
