@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage> {
     await PermissionService.requestLocationPermission();
     await PermissionService.requestNotificationPermission();
     await PermissionService.requestPedometerPermission();
-    await initializeNotificationService();
   }
 
   Future<void> initNotification() async {
