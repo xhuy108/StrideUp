@@ -14,6 +14,8 @@ class AppPalette {
 
   static const stroke = Color(0xFF98A8AA);
 
+  static const signout = Color(0xFFFF384C);
+
   static const error = Color(0xFFEE3F07);
   static const star = Color(0xFFFFBF00);
 }

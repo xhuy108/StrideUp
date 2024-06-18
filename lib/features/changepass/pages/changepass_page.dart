@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stride_up/features/profile/pages/profile_page.dart';
+import 'package:stride_up/config/themes/app_palette.dart';
+import 'package:stride_up/config/themes/media_resources.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stride_up/features/changepass/widgets/input_field.dart';
 
 class ChangepassPage extends StatelessWidget {
   const ChangepassPage({super.key});
@@ -8,47 +12,33 @@ class ChangepassPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
-            );
-          },
+        title: Text(
+          'Change Password',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: AppPalette.textPrimary,
+          ),
         ),
-        title: Text('Change Password'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Old Password',
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-              obscureText: true,
+            InputField(
+              hintText: 'Old Password',
+              keyboardType: TextInputType.visiblePassword,
             ),
             SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'New Password',
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-              obscureText: true,
+            InputField(
+              hintText: 'New Password',
+              keyboardType: TextInputType.visiblePassword,
             ),
             SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Confirm Password',
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-              obscureText: true,
+            InputField(
+              hintText: 'Confirm Password',
+              keyboardType: TextInputType.visiblePassword,
             ),
             Spacer(),
             SizedBox(
@@ -58,15 +48,18 @@ class ChangepassPage extends StatelessWidget {
                   // Handle update profile button press
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
+                  backgroundColor: AppPalette.primary,
                   padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 child: Text(
-                  'Update Profile',
-                  style: TextStyle(fontSize: 16),
+                  'Change Password',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppPalette.background,
+                  ),
                 ),
               ),
             ),

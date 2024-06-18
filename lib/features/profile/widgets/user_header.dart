@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:stride_up/config/themes/app_palette.dart';
+import 'package:stride_up/config/themes/media_resources.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class UserHeader extends StatelessWidget {
   @override
@@ -17,13 +20,23 @@ class UserHeader extends StatelessWidget {
             children: <Widget>[
               Text(
                 'Thanh Hien',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: AppPalette.textPrimary,
+                ),
               ),
               Row(
                 children: <Widget>[
-                  Icon(Icons.monetization_on, color: Colors.orange, size: 16),
+                  SvgPicture.asset(MediaResource.coinIcon),
                   SizedBox(width: 4),
-                  Text('134'),
+                  Text(
+                    '134',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: AppPalette.textSecondary,
+                    ),
+                  ),
                 ],
               ),
             ],
