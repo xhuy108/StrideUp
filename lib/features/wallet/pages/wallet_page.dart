@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,17 +8,56 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
+import 'package:stride_up/features/wallet/repositories/wallet_repository.dart';
 import 'package:stride_up/features/wallet/widgets/coin_amount_item.dart';
 import 'package:stride_up/features/wallet/widgets/wallet_action_button.dart';
+import 'package:stride_up/models/wallet.dart';
 
 class WalletPage extends StatefulWidget {
   const WalletPage({super.key});
-
   @override
   State<WalletPage> createState() => _WalletPageState();
 }
 
 class _WalletPageState extends State<WalletPage> {
+  double zCoin = 0;
+  int zCoinOriginal = 0 ;
+  double bnbCoin = 0;
+  int bnbCoinOriginal = 0 ;
+  String address = "0x";
+  Stream<DocumentSnapshot<Map<String, dynamic>>> walletSnapshotStream = const WalletRepository().getWalletSnapshot(); 
+  @override
+  void initState(){
+    super.initState();
+    walletSnapshotStream.listen((event) {
+      if(event.exists)
+      {
+        Wallet wallet = Wallet.fromJson(event.data()!);
+        if(zCoinOriginal != wallet.zCoin) {
+          zCoinOriginal = wallet.zCoin;
+          setState(() {
+          zCoin = getConvertCoin(wallet.zCoin);
+        });
+        }
+        if(bnbCoinOriginal!=wallet.bnbCoin){
+          bnbCoinOriginal = wallet.bnbCoin;
+          setState(() {
+            bnbCoin = getConvertCoin(wallet.bnbCoin);
+          });
+        }
+        if(address!=wallet.publicAddress){
+          setState(() {
+            address = wallet.publicAddress;
+          });
+        }
+      } 
+    });
+  }
+      double getConvertCoin(int input) {
+      double result = input / 1e18;
+      String resultString = result.toStringAsFixed(5);
+      return double.parse(resultString);
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +93,7 @@ class _WalletPageState extends State<WalletPage> {
                           ),
                           Gap(4.h),
                           Text(
-                            '0 BNB',
+                            '$bnbCoin BNB',
                             style: GoogleFonts.poppins(
                               fontSize: 26.sp,
                               fontWeight: FontWeight.w500,
@@ -116,13 +158,13 @@ class _WalletPageState extends State<WalletPage> {
                     CoinAmountItem(
                       coinIcon: MediaResource.bnbIcon,
                       coinName: 'BNB',
-                      coinAmount: '0',
+                      coinAmount: '$bnbCoin',
                     ),
                     Gap(24.h),
                     CoinAmountItem(
                       coinIcon: MediaResource.gmtIcon,
-                      coinName: 'GMT',
-                      coinAmount: '0',
+                      coinName: 'ZCoin',
+                      coinAmount: '$zCoin',
                     ),
                     Gap(24.h),
                     CoinAmountItem(

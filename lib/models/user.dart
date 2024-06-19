@@ -10,7 +10,7 @@ class User {
     required this.email,
     this.shoes,
   });
-
+  
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
