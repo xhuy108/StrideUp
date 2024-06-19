@@ -7,19 +7,23 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/core/common/widgets/app_button.dart';
 import 'package:stride_up/features/auth/widgets/auth_input_field.dart';
-import 'package:stride_up/features/wallet/pages/confirm_passcode_page.dart';
 import 'package:stride_up/features/wallet/pages/new_wallet_page.dart';
 
-class CreatePasscodePage extends StatefulWidget {
-  const CreatePasscodePage({super.key});
-
+class ConfirmPasscodePage extends StatefulWidget {
+   ConfirmPasscodePage({super.key, required this.code});
+  String code;
   @override
-  State<CreatePasscodePage> createState() => _CreatePasscodePageState();
+  State<ConfirmPasscodePage> createState() => _ConfirmPasscodePageState();
 }
 
-class _CreatePasscodePageState extends State<CreatePasscodePage> {
+class _ConfirmPasscodePageState extends State<ConfirmPasscodePage> {
   final TextEditingController _passcodeController = TextEditingController();
-
+  bool checkPasscode(String newPasscode){
+    if(newPasscode.length!=6) {
+      return false;
+    }
+    return newPasscode == widget.code;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +44,7 @@ class _CreatePasscodePageState extends State<CreatePasscodePage> {
           children: [
             Gap(36.h),
             Text(
-              'Create Passcode',
+              'Confirm Passcode',
               style: TextStyle(
                 fontSize: 26.sp,
                 fontWeight: FontWeight.w600,
@@ -49,7 +53,7 @@ class _CreatePasscodePageState extends State<CreatePasscodePage> {
             ),
             Gap(12.h),
             Text(
-              'Enter your passcode to create E-Waller',
+              'Enter to confirm passcode to E-Waller',
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
@@ -81,14 +85,14 @@ class _CreatePasscodePageState extends State<CreatePasscodePage> {
             AppButton(
               title: 'Continue',
               onPressed: () {
-                if(_passcodeController.text.length==6){
+                if(checkPasscode(_passcodeController.text))
+                {
                   Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (ctx) => ConfirmPasscodePage(code: _passcodeController.text,)
-                    ,
-                  ),
-                );
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => NewWalletPage(code: _passcodeController.text),
+                    ),
+                  );
                 }
               },
             ),

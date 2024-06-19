@@ -16,9 +16,12 @@ import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:stride_up/features/home/widgets/award_item.dart';
 import 'package:stride_up/features/home/widgets/shoes_information_tag.dart';
+import 'package:stride_up/features/wallet/pages/check_passcode_page.dart';
 import 'package:stride_up/features/wallet/pages/wallet_page.dart';
+import 'package:stride_up/features/wallet/repositories/wallet_repository.dart';
 import 'package:stride_up/features/wallet/utils/showAddWalletPopUp.dart';
 import 'package:stride_up/utils/permission_service.dart';
+import 'package:stride_up/utils/singleton.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     initalizeRequestPermission();
   }
-
+  WalletRepository walletRepository = const WalletRepository();
   Future<void> initalizeRequestPermission() async {
     await PermissionService.requestLocationPermission();
     await PermissionService.requestNotificationPermission();
@@ -50,7 +53,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isWalletExisted = true;
+    bool isWalletExisted = false;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -100,18 +103,21 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       children: [
                         IconButton(
-                          onPressed: () {
-                            print(isWalletExisted);
-                            if (isWalletExisted) {
+                          onPressed: ()async {
+                            final respone = await walletRepository.checkWallet();
+                            respone.fold((exception) => Singleton.instanceLogger.e("homeError: $exception"),
+                             (isWalletExisted) {
+                              if (isWalletExisted) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const WalletPage(),
+                                  builder: (context) => const CheckPasscodePage(),
                                 ),
                               );
                             } else {
                               showAddNewWalletPopUp(context);
                             }
+                            });
                           },
                           icon: SvgPicture.asset(
                             MediaResource.walletIcon,

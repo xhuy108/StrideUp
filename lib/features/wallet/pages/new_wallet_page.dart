@@ -2,23 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/core/common/widgets/app_button.dart';
 import 'package:stride_up/features/wallet/pages/export_page.dart';
 import 'package:stride_up/features/wallet/widgets/seed_phrase_text_item.dart';
+import 'package:stride_up/utils/wallet_provider.dart';
 
 class NewWalletPage extends StatefulWidget {
-  const NewWalletPage({super.key});
-
+  NewWalletPage({super.key, required this.code});
+  String code;
   @override
   State<NewWalletPage> createState() => _NewWalletPageState();
 }
 
 class _NewWalletPageState extends State<NewWalletPage> {
-  final phraseList = ['Speak', 'Never', 'Online', 'Erode', 'Vast'];
+  List<String> phraseList = [];
 
   @override
   Widget build(BuildContext context) {
+    final walletProvider = Provider.of<WalletProvider>(context);
+    final mnemonic = walletProvider.generateMnemonic();
+    setState(() {
+      phraseList = mnemonic.split(' ');
+    });
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppPalette.background,
@@ -93,7 +100,7 @@ class _NewWalletPageState extends State<NewWalletPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (ctx) => const ExportPage(),
+                    builder: (ctx) => ExportPage(randomSeedPharse: phraseList, code: widget.code),
                   ),
                 );
               },
