@@ -2,24 +2,39 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/core/common/widgets/app_button.dart';
 import 'package:stride_up/features/auth/widgets/auth_input_field.dart';
-import 'package:stride_up/features/wallet/pages/confirm_passcode_page.dart';
 import 'package:stride_up/features/wallet/pages/new_wallet_page.dart';
+import 'package:stride_up/features/wallet/pages/wallet_page.dart';
+import 'package:stride_up/features/wallet/repositories/wallet_repository.dart';
 
-class CreatePasscodePage extends StatefulWidget {
-  const CreatePasscodePage({super.key});
-
+class CheckPasscodePage extends StatefulWidget {
+  const CheckPasscodePage({super.key});
   @override
-  State<CreatePasscodePage> createState() => _CreatePasscodePageState();
+  State<CheckPasscodePage> createState() => _CheckPasscodePageState();
 }
 
-class _CreatePasscodePageState extends State<CreatePasscodePage> {
+class _CheckPasscodePageState extends State<CheckPasscodePage> {
   final TextEditingController _passcodeController = TextEditingController();
+  final WalletRepository walletRepository = const WalletRepository();
+  Future<bool> checkPasscode(String passcode) async{
+    final respone = await walletRepository.checkWalletPasscode(passcode);
+    
+    bool result = respone.fold(
+        (l) {
+          return false;
+        }, 
+        (r) {
+          return r;
+        }
+      );
 
+    return result;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +55,7 @@ class _CreatePasscodePageState extends State<CreatePasscodePage> {
           children: [
             Gap(36.h),
             Text(
-              'Create Passcode',
+              'Secured Passcode',
               style: TextStyle(
                 fontSize: 26.sp,
                 fontWeight: FontWeight.w600,
@@ -49,7 +64,7 @@ class _CreatePasscodePageState extends State<CreatePasscodePage> {
             ),
             Gap(12.h),
             Text(
-              'Enter your passcode to create E-Waller',
+              'Enter your passcode to E-Waller',
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
@@ -80,15 +95,26 @@ class _CreatePasscodePageState extends State<CreatePasscodePage> {
             const Spacer(),
             AppButton(
               title: 'Continue',
-              onPressed: () {
-                if(_passcodeController.text.length==6){
+              onPressed: () async {
+                if(await checkPasscode(_passcodeController.text))
+                {
                   Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (ctx) => ConfirmPasscodePage(code: _passcodeController.text,)
-                    ,
-                  ),
-                );
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => const WalletPage(),
+                    ),
+                  );
+                }
+                else{
+                  Fluttertoast.showToast(
+                      msg: "Passcode incorrect",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
                 }
               },
             ),

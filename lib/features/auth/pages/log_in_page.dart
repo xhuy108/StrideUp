@@ -1,5 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,25 +7,24 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:gap/gap.dart';
+import 'package:stride_up/core/common/widgets/navigation_menu.dart';
 import 'package:stride_up/core/utils/show_loading_indicator.dart';
 import 'package:stride_up/features/auth/bloc/auth_bloc.dart';
 import 'package:stride_up/core/common/widgets/app_button.dart';
-import 'package:stride_up/features/auth/pages/log_in_page.dart';
+import 'package:stride_up/features/auth/pages/sign_up_page.dart';
 import 'package:stride_up/features/auth/widgets/auth_input_field.dart';
 import 'package:stride_up/features/auth/widgets/social_button.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
   bool _isObscure = true;
 
   @override
@@ -45,37 +42,37 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: SingleChildScrollView(
-          child: BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              if (state is AuthLoading) {
-                showLoadingIndicator(context);
-              }
-              if (state is AuthFailure) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                  ),
-                );
-              }
-              if (state is AuthSuccess) {
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(),
-                  ),
-                );
-              }
-            },
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthLoading) {
+            showLoadingIndicator(context);
+          }
+          if (state is AuthFailure) {
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          }
+          if (state is AuthSuccess) {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NavigationMenu(),
+              ),
+            );
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Create new account,',
+                  'Welcome,',
                   style: TextStyle(
                     fontSize: 26.sp,
                     fontWeight: FontWeight.w600,
@@ -93,21 +90,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 Gap(28.h),
                 AuthInputField(
-                  hintText: 'Username',
-                  keyboardType: TextInputType.name,
-                  controller: _nameController,
-                ),
-                Gap(20.h),
-                AuthInputField(
                   hintText: 'Email',
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
-                ),
-                Gap(20.h),
-                AuthInputField(
-                  hintText: 'Phone number',
-                  keyboardType: TextInputType.phone,
-                  controller: _phoneController,
                 ),
                 Gap(20.h),
                 AuthInputField(
@@ -131,11 +116,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   title: 'Continue',
                   onPressed: () {
                     context.read<AuthBloc>().add(
-                          AuthSignUpWithEmailEvent(
+                          AuthLogInEvent(
                             email: _emailController.text,
                             password: _passwordController.text,
-                            username: _nameController.text,
-                            phoneNumber: _phoneController.text,
                           ),
                         );
                   },
@@ -165,6 +148,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 Gap(20.h),
                 SocialButton(
                   icon: SvgPicture.asset(
+                    MediaResource.phoneIcon,
+                  ),
+                  title: 'Continue with Phone',
+                  onPressed: () {},
+                ),
+                Gap(15.h),
+                SocialButton(
+                  icon: SvgPicture.asset(
                     MediaResource.googleIcon,
                   ),
                   title: 'Continue with Google',
@@ -174,14 +165,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 Center(
                   child: RichText(
                     text: TextSpan(
-                      text: 'Already have an account? ',
+                      text: 'Don\'t have an account?',
                       style: GoogleFonts.poppins(
                         fontSize: 12.sp,
                         color: Colors.black,
                       ),
                       children: [
                         TextSpan(
-                          text: 'Log In',
+                          text: ' Sign up',
                           style: GoogleFonts.poppins(
                             fontSize: 12.sp,
                             color: AppPalette.primary,
@@ -191,7 +182,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             ..onTap = () => Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (ctx) => const LoginPage(),
+                                    builder: (ctx) => const SignUpPage(),
                                   ),
                                 ),
                         ),

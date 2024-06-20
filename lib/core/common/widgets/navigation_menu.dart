@@ -65,6 +65,7 @@ class NavigationMenu extends StatelessWidget {
                   activeIcon: MediaResource.activeActivityIcon,
                   title: 'Activity',
                   isActive: state == 1,
+                  
                   onTap: () {
                     context.read<NavigationCubit>().selectItem(1);
                   },
