@@ -16,13 +16,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoading());
     });
     on<AuthSignUpWithEmailEvent>(_signUpWithEmail);
+    on<AuthLogInEvent>(_logIn);
+    on<AuthLogOutEvent>(_logOut);
   }
 
   void _signUpWithEmail(
     AuthSignUpWithEmailEvent event,
     Emitter<AuthState> emit,
   ) async {
-    final result = await _authRepository.signInWithEmailAndPassword(
+    final result = await _authRepository.signUpWithEmailAndPassword(
       event.email,
       event.password,
     );
@@ -33,6 +35,43 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (_) => emit(
         AuthSuccess(
           user: User(email: event.email, id: '1', name: 'John Doe'),
+        ),
+      ),
+    );
+  }
+
+  void _logIn(
+    AuthLogInEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    final result = await _authRepository.logIn(
+      event.email,
+      event.password,
+    );
+    result.fold(
+      (failure) => emit(
+        AuthFailure(message: failure.errorMessage),
+      ),
+      (_) => emit(
+        AuthSuccess(
+          user: User(email: event.email, id: '1', name: 'John Doe'),
+        ),
+      ),
+    );
+  }
+
+  void _logOut(
+    AuthLogOutEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    final result = await _authRepository.logOut();
+    result.fold(
+      (failure) => emit(
+        AuthFailure(message: failure.errorMessage),
+      ),
+      (_) => emit(
+        AuthSuccess(
+          user: User(email: '', id: '1', name: 'John Doe'),
         ),
       ),
     );

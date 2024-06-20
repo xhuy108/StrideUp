@@ -9,7 +9,7 @@ final _firebase = FirebaseAuth.instance;
 class AuthRepository {
   const AuthRepository();
 
-  ResultFuture<void> signInWithEmailAndPassword(
+  ResultFuture<void> signUpWithEmailAndPassword(
       String email, String password) async {
     try {
       final result = await _firebase.createUserWithEmailAndPassword(
@@ -18,6 +18,53 @@ class AuthRepository {
       );
 
       return const Right(null);
+    } catch (e) {
+      return Left(
+        ServerFailure(
+          message: e.toString(),
+          statusCode: 500,
+        ),
+      );
+    }
+  }
+
+  ResultFuture<void> logIn(String email, String password) async {
+    try {
+      final result = await _firebase.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      return const Right(null);
+    } on FirebaseAuthException catch (e) {
+      return Left(
+        ServerFailure(
+          message: e.message ?? 'An error occurred',
+          statusCode: 500,
+        ),
+      );
+    } catch (e) {
+      return Left(
+        ServerFailure(
+          message: e.toString(),
+          statusCode: 500,
+        ),
+      );
+    }
+  }
+
+  ResultFuture<void> logOut() async {
+    try {
+      final result = await _firebase.signOut();
+
+      return const Right(null);
+    } on FirebaseAuthException catch (e) {
+      return Left(
+        ServerFailure(
+          message: e.message ?? 'An error occurred',
+          statusCode: 500,
+        ),
+      );
     } catch (e) {
       return Left(
         ServerFailure(
