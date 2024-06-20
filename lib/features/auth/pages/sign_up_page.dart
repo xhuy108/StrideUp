@@ -63,7 +63,7 @@ class _SignUpPageState extends State<SignUpPage> {
               }
               if (state is AuthSuccess) {
                 Navigator.pop(context);
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const LoginPage(),
