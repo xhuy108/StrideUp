@@ -3,31 +3,20 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stride_up/core/errors/failures.dart';
 import 'package:stride_up/core/utils/typedefs.dart';
+import 'package:stride_up/models/shoes.dart';
 
 final _firebase = FirebaseAuth.instance;
 
 class ShopRepository {
   const ShopRepository();
 
-  ResultFuture<void> signUpWithEmailAndPassword(
-    String email,
-    String password,
-    String username,
-    String phoneNumber,
-  ) async {
+  ResultFuture<List<Shoes>> fetchShoes() async {
     try {
-      final result = await _firebase.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final res = await FirebaseFirestore.instance.collection('shoes').get();
+      final shoesList =
+          res.docs.map((doc) => Shoes.fromJson(doc.data())).toList();
 
-      FirebaseFirestore.instance.collection('users').doc(result.user!.uid).set({
-        'email': email,
-        'username': username,
-        'phoneNumber': phoneNumber,
-      });
-
-      return const Right(null);
+      return Right(shoesList);
     } catch (e) {
       return Left(
         ServerFailure(
