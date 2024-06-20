@@ -54,8 +54,7 @@ class _WalletPageState extends State<WalletPage> {
     });
   }
       double getConvertCoin(int input) {
-      double result = input / 1e18;
-      String resultString = result.toStringAsFixed(5);
+      String resultString = input.toStringAsFixed(10);
       return double.parse(resultString);
     }
   @override

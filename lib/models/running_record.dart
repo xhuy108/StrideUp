@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class RunningRecord {
@@ -25,7 +26,7 @@ class RunningRecord {
           .map((item) => LatLng(item['latitude'], item['longitude']))
           .toList(),
       time: json['time'],
-      timeCreate: DateTime.parse(json['timeCreate']),
+      timeCreate: (json['timeCreate'] as Timestamp).toDate()
     );
   }
 
@@ -39,6 +40,6 @@ class RunningRecord {
                 })
             .toList(),
         'time': time,
-        'timeCreate': timeCreate.toIso8601String(),
+        'timeCreate': Timestamp.fromDate(timeCreate),
       };
 }
