@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
+import 'package:stride_up/core/common/cubits/navigation_cubit/navigation_cubit.dart';
 import 'package:stride_up/core/utils/show_loading_indicator.dart';
 import 'package:stride_up/features/accountsetting/pages/accountsetting_page.dart';
 import 'package:stride_up/features/auth/bloc/auth_bloc.dart';
@@ -181,6 +182,7 @@ class ProfilePage extends StatelessWidget {
               ),
               onTap: () {
                 context.read<AuthBloc>().add(const AuthLogOutEvent());
+                context.read<NavigationCubit>().reset();
               },
             ),
           ],
