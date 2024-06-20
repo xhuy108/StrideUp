@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:gap/gap.dart';
@@ -9,6 +11,7 @@ import 'package:stride_up/core/common/widgets/navigation_menu.dart';
 import 'package:stride_up/core/utils/show_loading_indicator.dart';
 import 'package:stride_up/features/auth/bloc/auth_bloc.dart';
 import 'package:stride_up/core/common/widgets/app_button.dart';
+import 'package:stride_up/features/auth/pages/sign_up_page.dart';
 import 'package:stride_up/features/auth/widgets/auth_input_field.dart';
 import 'package:stride_up/features/auth/widgets/social_button.dart';
 
@@ -157,6 +160,35 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   title: 'Continue with Google',
                   onPressed: () {},
+                ),
+                Gap(20.h),
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Don\'t have an account?',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12.sp,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: ' Sign up',
+                          style: GoogleFonts.poppins(
+                            fontSize: 12.sp,
+                            color: AppPalette.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (ctx) => const SignUpPage(),
+                                  ),
+                                ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

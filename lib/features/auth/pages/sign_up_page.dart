@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:gap/gap.dart';
@@ -24,6 +26,8 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   bool _isObscure = true;
 
   @override
@@ -89,9 +93,21 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 Gap(28.h),
                 AuthInputField(
+                  hintText: 'Username',
+                  keyboardType: TextInputType.name,
+                  controller: _nameController,
+                ),
+                Gap(20.h),
+                AuthInputField(
                   hintText: 'Email',
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
+                ),
+                Gap(20.h),
+                AuthInputField(
+                  hintText: 'Phone number',
+                  keyboardType: TextInputType.phone,
+                  controller: _phoneController,
                 ),
                 Gap(20.h),
                 AuthInputField(
@@ -118,6 +134,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           AuthSignUpWithEmailEvent(
                             email: _emailController.text,
                             password: _passwordController.text,
+                            username: _nameController.text,
+                            phoneNumber: _phoneController.text,
                           ),
                         );
                   },
@@ -147,18 +165,39 @@ class _SignUpPageState extends State<SignUpPage> {
                 Gap(20.h),
                 SocialButton(
                   icon: SvgPicture.asset(
-                    MediaResource.phoneIcon,
-                  ),
-                  title: 'Continue with Phone',
-                  onPressed: () {},
-                ),
-                Gap(15.h),
-                SocialButton(
-                  icon: SvgPicture.asset(
                     MediaResource.googleIcon,
                   ),
                   title: 'Continue with Google',
                   onPressed: () {},
+                ),
+                Gap(20.h),
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Already have an account? ',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12.sp,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Log In',
+                          style: GoogleFonts.poppins(
+                            fontSize: 12.sp,
+                            color: AppPalette.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (ctx) => const LoginPage(),
+                                  ),
+                                ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

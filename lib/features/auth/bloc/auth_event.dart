@@ -11,13 +11,17 @@ class AuthSignUpWithEmailEvent extends AuthEvent {
   const AuthSignUpWithEmailEvent({
     required this.email,
     required this.password,
+    required this.username,
+    required this.phoneNumber,
   });
 
   final String email;
   final String password;
+  final String username;
+  final String phoneNumber;
 
   @override
-  List<Object> get props => [email, password];
+  List<Object> get props => [email, password, username, phoneNumber];
 }
 
 class AuthLogInEvent extends AuthEvent {
