@@ -35,9 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         AuthFailure(message: failure.errorMessage),
       ),
       (_) => emit(
-        AuthSuccess(
-          user: User(email: event.email, id: '1', name: 'John Doe'),
-        ),
+        const AuthSuccess(),
       ),
     );
   }
@@ -55,9 +53,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         AuthFailure(message: failure.errorMessage),
       ),
       (_) => emit(
-        AuthSuccess(
-          user: User(email: event.email, id: '1', name: 'John Doe'),
-        ),
+        const AuthSuccess(),
       ),
     );
   }
@@ -72,9 +68,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         AuthFailure(message: failure.errorMessage),
       ),
       (_) => emit(
-        AuthSuccess(
-          user: User(email: '', id: '1', name: 'John Doe'),
-        ),
+        const AuthSuccess(),
       ),
     );
   }
