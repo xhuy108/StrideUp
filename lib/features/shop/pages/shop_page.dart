@@ -43,11 +43,6 @@ class _ShopPageState extends State<ShopPage> {
                   keyboardType: TextInputType.text,
                   controller: _searchController,
                 ),
-                SearchField(
-                  hintText: 'Search',
-                  keyboardType: TextInputType.text,
-                  controller: _searchController,
-                ),
                 Gap(20.h),
                 Expanded(
                   child: GridView.builder(
@@ -56,7 +51,7 @@ class _ShopPageState extends State<ShopPage> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 20.w,
                       mainAxisSpacing: 20.h,
-                      childAspectRatio: 2 / 3,
+                      childAspectRatio: 0.64,
                     ),
                     itemBuilder: (context, index) => const ShoesCard(),
                   ),
