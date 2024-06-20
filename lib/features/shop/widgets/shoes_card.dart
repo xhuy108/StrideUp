@@ -7,9 +7,12 @@ import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 
 import 'package:stride_up/features/home/widgets/shoes_information_tag.dart';
+import 'package:stride_up/models/shoes.dart';
 
 class ShoesCard extends StatelessWidget {
-  const ShoesCard({super.key});
+  const ShoesCard({super.key, required this.shoes});
+
+  final Shoes shoes;
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +38,12 @@ class ShoesCard extends StatelessWidget {
             children: [
               ShoesInformationTag(
                 icon: MediaResource.luckIcon,
-                value: '110',
+                value: shoes.luck.toString(),
               ),
               const Spacer(),
               ShoesInformationTag(
                 icon: MediaResource.energyIcon,
-                value: '120',
+                value: shoes.energy.toString(),
               ),
             ],
           ),
@@ -69,8 +72,8 @@ class ShoesCard extends StatelessWidget {
                 left: -4,
                 right: -4,
                 bottom: -4,
-                child: Image.asset(
-                  'assets/images/shoes.png',
+                child: Image.network(
+                  shoes.image,
                   width: 160.w,
                   height: 160.h,
                 ),
@@ -85,7 +88,7 @@ class ShoesCard extends StatelessWidget {
                   SvgPicture.asset(MediaResource.coinIcon),
                   Gap(4.w),
                   Text(
-                    '10000',
+                    shoes.price.toString(),
                     style: GoogleFonts.poppins(
                       fontSize: 10.sp,
                       color: Colors.black,
