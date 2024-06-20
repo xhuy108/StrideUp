@@ -60,6 +60,16 @@ class MediaResource {
   static const usdtIcon = '$_baseIcons/usdtIcon.svg';
   static const walletWarningIcon = '$_baseIcons/walletWarningIcon.svg';
 
+  //Profile
+  static const pro5Icon = '$_baseIcons/pro5Icon.svg';
+  static const shoebagIcon = '$_baseIcons/shoebagIcon.svg';
+  static const passIcon = '$_baseIcons/passIcon.svg';
+  static const paymentIcon = '$_baseIcons/paymentIcon.svg';
+  static const notiIcon = '$_baseIcons/notiIcon.svg';
+  static const customappIcon = '$_baseIcons/customappIcon.svg';
+  static const signoutIcon = '$_baseIcons/signoutIcon.svg';
+  static const deleteIcon = '$_baseIcons/deleteIcon.svg';
+
   //IMAGE
   static const _baseImages = 'assets/images';
 

@@ -2,42 +2,49 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
-import 'package:stride_up/config/themes/media_resources.dart';
-import 'package:stride_up/features/auth/pages/name_input_page.dart';
 import 'package:stride_up/core/common/widgets/app_button.dart';
 import 'package:stride_up/features/auth/widgets/auth_input_field.dart';
-import 'package:stride_up/features/auth/widgets/skip_button.dart';
+import 'package:stride_up/features/wallet/pages/new_wallet_page.dart';
 
-class CodeInputPage extends StatefulWidget {
-  const CodeInputPage({super.key});
-
+class ConfirmPasscodePage extends StatefulWidget {
+   ConfirmPasscodePage({super.key, required this.code});
+  String code;
   @override
-  State<CodeInputPage> createState() => _CodeInputPageState();
+  State<ConfirmPasscodePage> createState() => _ConfirmPasscodePageState();
 }
 
-class _CodeInputPageState extends State<CodeInputPage> {
-  final TextEditingController _phoneController = TextEditingController();
-
+class _ConfirmPasscodePageState extends State<ConfirmPasscodePage> {
+  final TextEditingController _passcodeController = TextEditingController();
+  bool checkPasscode(String newPasscode){
+    if(newPasscode.length!=6) {
+      return false;
+    }
+    return newPasscode == widget.code;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          SkipButton(
-            onPressed: () {},
+        backgroundColor: AppPalette.background,
+        centerTitle: true,
+        title: Text(
+          'E-Wallet',
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w500,
           ),
-        ],
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Gap(36.h),
             Text(
-              'Enter 6-digit code',
+              'Confirm Passcode',
               style: TextStyle(
                 fontSize: 26.sp,
                 fontWeight: FontWeight.w600,
@@ -46,7 +53,7 @@ class _CodeInputPageState extends State<CodeInputPage> {
             ),
             Gap(12.h),
             Text(
-              'We sent a verification code to your phone number +84 398 285 020',
+              'Enter to confirm passcode to E-Waller',
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
@@ -72,41 +79,21 @@ class _CodeInputPageState extends State<CodeInputPage> {
                   FocusScope.of(context).nextFocus();
                 }
               },
-              controller: _phoneController,
-            ),
-            Gap(15.h),
-            RichText(
-              text: TextSpan(
-                text: 'Didn\'t receive the code? ',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppPalette.textPrimary,
-                ),
-                children: [
-                  TextSpan(
-                    text: 'Request again',
-                    style: const TextStyle(
-                      color: AppPalette.primary,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        debugPrint('Request again');
-                      },
-                  ),
-                ],
-              ),
+              controller: _passcodeController,
             ),
             const Spacer(),
             AppButton(
               title: 'Continue',
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (ctx) => const NameInputPage(),
-                  ),
-                );
+                if(checkPasscode(_passcodeController.text))
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => NewWalletPage(code: _passcodeController.text),
+                    ),
+                  );
+                }
               },
             ),
             Gap(20.h),
