@@ -63,6 +63,7 @@ dependencies:
   provider: ^6.1.2
   web3dart: ^2.7.3
   fluttertoast: ^8.2.6
+  image_picker: ^0.8.4+4
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -37,14 +37,6 @@ class _ChangepassPageState extends State<ChangepassPage> {
     super.dispose();
   }
 
-  Future<void> _showCurrentUserEmail() async {
-    if (_user != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Email của người dùng: ${_user!.email}')),
-      );
-    }
-  }
-
   Future<void> _changePassword() async {
     if (_formKey.currentState!.validate()) {
       try {
@@ -131,10 +123,6 @@ class _ChangepassPageState extends State<ChangepassPage> {
                   }
                   return null;
                 },
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.email),
-                  onPressed: _showCurrentUserEmail,
-                ),
               ),
               SizedBox(height: 16),
               InputField(
