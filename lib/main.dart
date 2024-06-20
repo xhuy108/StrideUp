@@ -12,7 +12,11 @@ import 'package:stride_up/features/auth/pages/sign_up_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:stride_up/features/auth/repositories/auth_repository.dart';
+import 'package:stride_up/features/shop/bloc/shoes_bloc.dart';
+import 'package:stride_up/features/shop/repositories/shop_repository.dart';
+
 import 'package:stride_up/utils/wallet_provider.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
@@ -31,6 +35,11 @@ void main() async {
       BlocProvider(
         create: (_) => AuthBloc(
           authRepository: const AuthRepository(),
+        ),
+      ),
+      BlocProvider(
+        create: (_) => ShoesBloc(
+          shopRepository: const ShopRepository(),
         ),
       ),
       ChangeNotifierProvider<WalletProvider>.value(value: walletProvider),
