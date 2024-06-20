@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -15,7 +16,12 @@ import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:stride_up/features/home/widgets/award_item.dart';
 import 'package:stride_up/features/home/widgets/shoes_information_tag.dart';
+import 'package:stride_up/features/wallet/pages/check_passcode_page.dart';
+import 'package:stride_up/features/wallet/pages/wallet_page.dart';
+import 'package:stride_up/features/wallet/repositories/wallet_repository.dart';
+import 'package:stride_up/features/wallet/utils/showAddWalletPopUp.dart';
 import 'package:stride_up/utils/permission_service.dart';
+import 'package:stride_up/utils/singleton.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,28 +31,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
     initalizeRequestPermission();
   }
-  Future<void> initalizeRequestPermission() async
-  {
+  WalletRepository walletRepository = const WalletRepository();
+  Future<void> initalizeRequestPermission() async {
     await PermissionService.requestLocationPermission();
     await PermissionService.requestNotificationPermission();
     await PermissionService.requestPedometerPermission();
-    await initializeNotificationService();
-    
   }
-  Future<void> initNotification() async{
+
+  Future<void> initNotification() async {
     Map<String, dynamic> data = {
       'context': context,
     };
-    
-      FlutterBackgroundService().invoke(ServiceMethod.START_NOTIFICATION_SERVICE,data);
+
+    FlutterBackgroundService()
+        .invoke(ServiceMethod.START_NOTIFICATION_SERVICE, data);
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isWalletExisted = false;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -96,13 +103,30 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: ()async {
+                            final respone = await walletRepository.checkWallet();
+                            respone.fold((exception) => Singleton.instanceLogger.e("homeError: $exception"),
+                             (isWalletExisted) {
+                              if (isWalletExisted) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CheckPasscodePage(),
+                                ),
+                              );
+                            } else {
+                              showAddNewWalletPopUp(context);
+                            }
+                            });
+                          },
                           icon: SvgPicture.asset(
-                            MediaResource.notificationIcon,
+                            MediaResource.walletIcon,
                           ),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            FirebaseAuth.instance.signOut();
+                          },
                           icon: SvgPicture.asset(
                             MediaResource.settingIcon,
                           ),

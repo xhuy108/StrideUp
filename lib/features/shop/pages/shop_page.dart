@@ -43,6 +43,11 @@ class _ShopPageState extends State<ShopPage> {
                   keyboardType: TextInputType.text,
                   controller: _searchController,
                 ),
+                SearchField(
+                  hintText: 'Search',
+                  keyboardType: TextInputType.text,
+                  controller: _searchController,
+                ),
                 Gap(20.h),
                 Expanded(
                   child: GridView.builder(
