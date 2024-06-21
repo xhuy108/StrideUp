@@ -245,6 +245,10 @@ class _HomePageState extends State<HomePage> {
                                       selectedShoes = shoes.length - 1;
                                     });
                                   }
+                                  context
+                                      .read<UserShoesCubit>()
+                                      .updateUserCurrentShoes(
+                                          shoes[selectedShoes].id);
                                 },
                                 style: IconButton.styleFrom(
                                   backgroundColor: AppPalette.background,
@@ -272,6 +276,10 @@ class _HomePageState extends State<HomePage> {
                                       selectedShoes = 0;
                                     });
                                   }
+                                  context
+                                      .read<UserShoesCubit>()
+                                      .updateUserCurrentShoes(
+                                          shoes[selectedShoes].id);
                                 },
                                 style: IconButton.styleFrom(
                                   backgroundColor: AppPalette.background,

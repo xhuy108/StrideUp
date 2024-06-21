@@ -70,8 +70,7 @@ class MyShoesRepository {
             .get();
 
         final shoes = shoesSnapshot.docs.map((doc) {
-          final data = doc.data() as Map<String, dynamic>;
-          return Shoes.fromJson(data);
+          return Shoes.fromJson(doc);
         }).toList();
         return shoes;
       } else {
