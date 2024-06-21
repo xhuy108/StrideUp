@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:stride_up/core/errors/failures.dart';
 import 'package:stride_up/core/utils/typedefs.dart';
 import 'package:stride_up/models/user.dart';
@@ -26,6 +29,9 @@ class AuthRepository {
         'email': email,
         'username': username,
         'phoneNumber': phoneNumber,
+        'image':
+            'https://res.cloudinary.com/daitxafuw/image/upload/v1718976539/avatar_pftxgl.jpg',
+        'coin': '0',
       });
 
       return const Right(null);
