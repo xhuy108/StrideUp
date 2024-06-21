@@ -52,9 +52,12 @@ class RunningReporsitory {
   }
   ResultFuture<Shoes> getCurrentShoes()async{
     try{
-      final userData = await firestore.collection("user").doc(auth.currentUser!.uid).get();
-      final user = userModel.User.fromJson(userData.data()!);
-      return Right(new Shoes(name: "name", description: "description", energy: 5, luck: 5, price: 5, image: "image"));
+      final userData = await firestore.collection("users").doc(auth.currentUser!.uid).get();
+      final userTemp = userData.data()!;
+      final user = userModel.User.fromJson(userTemp);
+      final shoesData = await firestore.collection("shoes").doc(user.currentShoes).get();
+      final currentShoe = Shoes.fromJson(shoesData.data()!);
+      return Right(currentShoe);
     }
     catch(e){
         return Left(

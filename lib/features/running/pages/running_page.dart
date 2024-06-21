@@ -56,6 +56,7 @@ class _RunningPageState extends State<RunningPage> {
     super.initState();
     runningReporsitory = const RunningReporsitory();
     _listenLocationChange();
+    getCurrentShoes();
   }
   void initTimer(){
     timer = Timer.periodic(const Duration(seconds: 1), (timer) { 
@@ -66,9 +67,13 @@ class _RunningPageState extends State<RunningPage> {
     });
     
   }
-// Future<void> getCurrentShoes()async{
-  
-// }
+  Future<void> getCurrentShoes()async{
+    final result = await runningReporsitory.getCurrentShoes();
+    result.fold((e) {Singleton.instanceLogger.e("shoesError $e");}, (r) {
+      currentShoes = r;
+      print("currentShoes $currentShoes");
+    });
+  }
 void _listenLocationChange() {
     const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
@@ -161,7 +166,7 @@ void _listenLocationChange() {
   }
   void stopRunning()async {
     RunningRecord runningRecord = RunningRecord(userId: FirebaseAuth.instance.currentUser!.uid, distanceGo: currentDistance,
-       locationGo: _route, time: timeCount, timeCreate: DateTime.now(), caculateMoney());
+       locationGo: _route, time: timeCount, timeCreate: DateTime.now(),coin: caculateMoney(currentShoes.luck, currentShoes.energy,timeCount.toDouble(), currentDistance.toDouble()));
     setState(() {
       isRunning = false;
       timer!.cancel();
