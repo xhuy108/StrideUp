@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -14,6 +13,7 @@ import 'package:stride_up/background_service/background_server_notifaction.dart'
 import 'package:stride_up/background_service/constant_service.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
+import 'package:stride_up/features/home/bloc/home_bloc.dart';
 import 'package:stride_up/features/home/widgets/award_item.dart';
 import 'package:stride_up/features/home/widgets/shoes_information_tag.dart';
 import 'package:stride_up/features/wallet/pages/check_passcode_page.dart';
@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    context.read<HomeBloc>().add(FetchUserEvent());
     initalizeRequestPermission();
   }
 
@@ -64,80 +65,95 @@ class _HomePageState extends State<HomePage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 30.r,
-                      backgroundImage: AssetImage('assets/images/avatar.jpg'),
-                    ),
-                    Gap(10.w),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Be Chip',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
-                            color: AppPalette.textPrimary,
+                BlocBuilder<HomeBloc, HomeState>(
+                  builder: (context, state) {
+                    if (state is HomeLoading) {
+                      return const SizedBox();
+                    }
+                    if (state is HomeFailure) {
+                      return Center(
+                        child: Text(state.message),
+                      );
+                    }
+                    if (state is HomeSuccess) {
+                      return Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 30.r,
+                            backgroundImage: NetworkImage(state.user.image),
                           ),
-                        ),
-                        Gap(3.h),
-                        Row(
-                          children: [
-                            SvgPicture.asset(MediaResource.coinIcon),
-                            Gap(3.w),
-                            Text(
-                              '134',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w500,
-                                color: AppPalette.textSecondary,
+                          Gap(10.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                state.user.username,
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppPalette.textPrimary,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () async {
-                            final respone =
-                                await walletRepository.checkWallet();
-                            respone.fold(
-                                (exception) => Singleton.instanceLogger
-                                    .e("homeError: $exception"),
-                                (isWalletExisted) {
-                              if (isWalletExisted) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CheckPasscodePage(),
+                              Gap(3.h),
+                              Row(
+                                children: [
+                                  SvgPicture.asset(MediaResource.coinIcon),
+                                  Gap(3.w),
+                                  Text(
+                                    state.user.coin.toString(),
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppPalette.textSecondary,
+                                    ),
                                   ),
-                                );
-                              } else {
-                                showAddNewWalletPopUp(context);
-                              }
-                            });
-                          },
-                          icon: SvgPicture.asset(
-                            MediaResource.walletIcon,
+                                ],
+                              ),
+                            ],
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            FirebaseAuth.instance.signOut();
-                          },
-                          icon: SvgPicture.asset(
-                            MediaResource.settingIcon,
+                          const Spacer(),
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                  final respone =
+                                      await walletRepository.checkWallet();
+                                  respone.fold(
+                                      (exception) => Singleton.instanceLogger
+                                          .e("homeError: $exception"),
+                                      (isWalletExisted) {
+                                    if (isWalletExisted) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const CheckPasscodePage(),
+                                        ),
+                                      );
+                                    } else {
+                                      showAddNewWalletPopUp(context);
+                                    }
+                                  });
+                                },
+                                icon: SvgPicture.asset(
+                                  MediaResource.walletIcon,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  FirebaseAuth.instance.signOut();
+                                },
+                                icon: SvgPicture.asset(
+                                  MediaResource.settingIcon,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      );
+                    }
+                    return const SizedBox();
+                  },
                 ),
                 Gap(28.h),
                 RichText(
