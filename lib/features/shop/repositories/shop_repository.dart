@@ -15,7 +15,16 @@ class ShopRepository {
       final res = await FirebaseFirestore.instance.collection('shoes').get();
       final shoesList = res.docs.map((doc) => Shoes.fromJson(doc)).toList();
 
-      return Right(shoesList);
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_firebase.currentUser!.uid)
+          .get();
+      final userShoes = List<String>.from(userDoc['shoes']);
+
+      final shoesListFiltered =
+          shoesList.where((shoe) => !userShoes.contains(shoe.id)).toList();
+
+      return Right(shoesListFiltered);
     } catch (e) {
       return Left(
         ServerFailure(
