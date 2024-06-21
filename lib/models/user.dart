@@ -4,17 +4,18 @@ class User {
   final String id;
   final String name;
   final String email;
-  final String walletAddress;
+
   final String image;
-  final List<Shoes>? shoes;
+  final List<Shoes> shoes;
+  final Shoes currentShoes;
 
   const User({
     required this.id,
     required this.name,
     required this.email,
-    required this.walletAddress,
+    required this.currentShoes,
     required this.image,
-    this.shoes,
+    required this.shoes,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -22,10 +23,8 @@ class User {
       id: json['id'],
       name: json['name'],
       email: json['email'],
-      shoes: json['shoes'] != null
-          ? (json['shoes'] as List).map((i) => Shoes.fromJson(i)).toList()
-          : null,
-      walletAddress: json['walletAddress'],
+      shoes: (json['shoes'] as List).map((i) => Shoes.fromJson(i)).toList(),
+      currentShoes: json['currentShoes'],
       image: json['image'],
     );
   }
