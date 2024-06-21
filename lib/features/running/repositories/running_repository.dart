@@ -56,9 +56,10 @@ class RunningReporsitory {
       final userTemp = userData.data()!;
       final user = userModel.User.fromJson(userTemp);
       final shoesData = await firestore.collection("shoes").doc(user.currentShoes).get();
-      final currentShoe = Shoes.fromJson(shoesData.data()!);
+      final currentShoe = Shoes.fromJson(shoesData);
       return Right(currentShoe);
     }
+    
     catch(e){
         return Left(
         ServerFailure(

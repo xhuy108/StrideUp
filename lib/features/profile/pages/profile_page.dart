@@ -44,7 +44,7 @@ class ProfilePage extends StatelessWidget {
           }
         },
         child: ListView(
-          children: <Widget>[
+          children: [
             UserHeader(),
             Gap(16.h), // Khoảng cách giữa UserHeader và danh sách
             Padding(
@@ -129,22 +129,6 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: SvgPicture.asset(MediaResource.paymentIcon),
-              title: Text(
-                'Payment Methods',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: AppPalette.textPrimary,
-                ),
-              ),
-              trailing:
-                  Icon(Icons.arrow_forward_ios, color: AppPalette.primary),
-              onTap: () {
-                // Chuyển đến Phương thức thanh toán
-              },
-            ),
-            ListTile(
               leading: SvgPicture.asset(MediaResource.notiIcon),
               title: Text(
                 'Notification',
@@ -158,22 +142,6 @@ class ProfilePage extends StatelessWidget {
                   Icon(Icons.arrow_forward_ios, color: AppPalette.primary),
               onTap: () {
                 // Chuyển đến Thông báo
-              },
-            ),
-            ListTile(
-              leading: SvgPicture.asset(MediaResource.customappIcon),
-              title: Text(
-                'Custom App Icon',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: AppPalette.textPrimary,
-                ),
-              ),
-              trailing:
-                  Icon(Icons.arrow_forward_ios, color: AppPalette.primary),
-              onTap: () {
-                // Chuyển đến Biểu tượng ứng dụng tùy chỉnh
               },
             ),
             SizedBox(height: 16), // Khoảng cách giữa các phần

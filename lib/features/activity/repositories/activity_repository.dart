@@ -19,6 +19,7 @@ class ActivityRepository{
       final response = await firestore.collection(RunningRecord.COLLECTION_NAME)
       .where("timeCreate",isGreaterThanOrEqualTo: startOfDay).where("timeCreate", isLessThanOrEqualTo: endOfDay)
       .where("userId",isEqualTo: auth.currentUser!.uid).get();
+
       final records = response.docs.map((doc) => RunningRecord.fromJson(doc.data())).toList();
       double totalDistance = 0;
       double totalTime = 0;

@@ -18,6 +18,7 @@ import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:stride_up/core/constraints/map_style.dart';
 import 'package:stride_up/core/utils/typedefs.dart';
 import 'package:stride_up/features/running/repositories/running_repository.dart';
+import 'package:stride_up/features/running/utils/show_running_result.dart';
 import 'package:stride_up/features/running/widgets/running_information_item.dart';
 import 'package:stride_up/models/running_record.dart';
 import 'package:stride_up/models/shoes.dart';
@@ -145,8 +146,6 @@ void _listenLocationChange() {
     return '${(distance / 1000).toDouble()} KM';
   }
 
-
-
   Future<void> generatePolylineFromPoints(
       List<LatLng> polylineCoordinates) async {
     final polyline = Polyline(
@@ -184,6 +183,7 @@ void _listenLocationChange() {
 
     });
       final response = await runningReporsitory.upRunningStatus(runningRecord);
+      showRunningResultDialog(context,runningRecord);
   }
   @override
   Widget build(BuildContext context) {

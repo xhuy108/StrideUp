@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class Shoes extends Equatable {
+  final String id;
   final String name;
   final String description;
   final int energy;
@@ -9,6 +11,7 @@ class Shoes extends Equatable {
   final String image;
 
   const Shoes({
+    required this.id,
     required this.name,
     required this.description,
     required this.energy,
@@ -17,8 +20,9 @@ class Shoes extends Equatable {
     required this.image,
   });
 
-  factory Shoes.fromJson(Map<String, dynamic> json) {
+  factory Shoes.fromJson(DocumentSnapshot json) {
     return Shoes(
+      id: json.id,
       name: json['name'],
       description: json['description'],
       energy: (json['energy'] as num).toInt(),

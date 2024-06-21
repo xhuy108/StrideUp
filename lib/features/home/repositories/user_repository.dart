@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stride_up/core/errors/failures.dart';
 import 'package:stride_up/core/utils/typedefs.dart';
+import 'package:stride_up/models/shoes.dart';
 import 'package:stride_up/models/user.dart' as user_model;
 
 class UserRepository {
@@ -14,9 +15,61 @@ class UserRepository {
           .doc(currentUser)
           .get();
 
-      print(user);
-
       return Right(user_model.User.fromJson(user.data()!));
+    } catch (e) {
+      return Left(
+        ServerFailure(
+          message: e.toString(),
+          statusCode: 500,
+        ),
+      );
+    }
+  }
+
+  ResultFuture<List<Shoes>> fetchUserShoes() async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser!.uid;
+      final userData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser)
+          .get();
+
+      final user = user_model.User.fromJson(userData.data()!);
+
+      final shoes = await Future.wait(
+        user.shoes.map(
+          (shoeId) async {
+            final shoe = await FirebaseFirestore.instance
+                .collection('shoes')
+                .doc(shoeId)
+                .get();
+
+            return Shoes.fromJson(shoe);
+          },
+        ),
+      );
+
+      return Right(shoes);
+    } catch (e) {
+      return Left(
+        ServerFailure(
+          message: e.toString(),
+          statusCode: 500,
+        ),
+      );
+    }
+  }
+
+  ResultFuture<void> updateUserCurrentShoes(String shoesId) async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser!.uid;
+      print('update');
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser)
+          .update({'currentShoes': shoesId});
+
+      return const Right(null);
     } catch (e) {
       return Left(
         ServerFailure(
