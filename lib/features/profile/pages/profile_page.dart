@@ -129,22 +129,6 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: SvgPicture.asset(MediaResource.paymentIcon),
-              title: Text(
-                'Payment Methods',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: AppPalette.textPrimary,
-                ),
-              ),
-              trailing:
-                  Icon(Icons.arrow_forward_ios, color: AppPalette.primary),
-              onTap: () {
-                // Chuyển đến Phương thức thanh toán
-              },
-            ),
-            ListTile(
               leading: SvgPicture.asset(MediaResource.notiIcon),
               title: Text(
                 'Notification',
