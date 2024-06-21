@@ -14,6 +14,7 @@ import 'package:stride_up/background_service/constant_service.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:stride_up/features/home/bloc/home_bloc.dart';
+import 'package:stride_up/features/home/cubit/user_shoes_cubit.dart';
 import 'package:stride_up/features/home/widgets/award_item.dart';
 import 'package:stride_up/features/home/widgets/shoes_information_tag.dart';
 import 'package:stride_up/features/wallet/pages/check_passcode_page.dart';
@@ -30,10 +31,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int selectedShoes = 0;
   @override
   void initState() {
     super.initState();
     context.read<HomeBloc>().add(FetchUserEvent());
+    context.read<UserShoesCubit>().fetchUserShoes();
     initalizeRequestPermission();
   }
 
@@ -179,84 +182,123 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Gap(30.h),
-                Stack(
-                  children: [
-                    Container(
-                      height: 250.h,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.r),
-                        image: const DecorationImage(
-                          image: AssetImage(MediaResource.shoesBackground),
-                          fit: BoxFit.cover,
-                          filterQuality: FilterQuality.high,
-                          opacity: 0.6,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 20.h,
-                      left: 16.w,
-                      right: 16.w,
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                BlocBuilder<UserShoesCubit, UserShoesState>(
+                  builder: (context, state) {
+                    if (state is UserShoesLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (state is UserShoesFailure) {
+                      return Center(
+                        child: Text(state.message),
+                      );
+                    }
+                    if (state is UserShoesSuccess) {
+                      final shoes = state.shoes;
+                      return Stack(
                         children: [
-                          ShoesInformationTag(
-                            icon: MediaResource.luckIcon,
-                            value: '110',
+                          Container(
+                            height: 250.h,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.r),
+                              image: const DecorationImage(
+                                image:
+                                    AssetImage(MediaResource.shoesBackground),
+                                fit: BoxFit.cover,
+                                filterQuality: FilterQuality.high,
+                                opacity: 0.6,
+                              ),
+                            ),
                           ),
-                          ShoesInformationTag(
-                            icon: MediaResource.energyIcon,
-                            value: '120',
+                          Positioned(
+                            top: 20.h,
+                            left: 16.w,
+                            right: 16.w,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ShoesInformationTag(
+                                  icon: MediaResource.luckIcon,
+                                  value: shoes[selectedShoes].luck.toString(),
+                                ),
+                                ShoesInformationTag(
+                                  icon: MediaResource.energyIcon,
+                                  value: shoes[selectedShoes].luck.toString(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Positioned.fill(
+                            left: 16.w,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: IconButton(
+                                onPressed: () {
+                                  if (selectedShoes > 0) {
+                                    setState(() {
+                                      selectedShoes--;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedShoes = shoes.length - 1;
+                                    });
+                                  }
+                                },
+                                style: IconButton.styleFrom(
+                                  backgroundColor: AppPalette.background,
+                                ),
+                                iconSize: 18.w,
+                                icon: const Icon(
+                                  Icons.arrow_back_ios_rounded,
+                                  color: AppPalette.primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned.fill(
+                            right: 16.w,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                onPressed: () {
+                                  if (selectedShoes < shoes.length - 1) {
+                                    setState(() {
+                                      selectedShoes++;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedShoes = 0;
+                                    });
+                                  }
+                                },
+                                style: IconButton.styleFrom(
+                                  backgroundColor: AppPalette.background,
+                                ),
+                                iconSize: 18.w,
+                                icon: const Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  color: AppPalette.primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Image.network(
+                                shoes[selectedShoes].image,
+                                width: 160.w,
+                                height: 160.h,
+                              ),
+                            ),
                           ),
                         ],
-                      ),
-                    ),
-                    Positioned.fill(
-                      left: 16.w,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          onPressed: () {},
-                          style: IconButton.styleFrom(
-                            backgroundColor: AppPalette.background,
-                          ),
-                          iconSize: 18.w,
-                          icon: const Icon(
-                            Icons.arrow_back_ios_rounded,
-                            color: AppPalette.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned.fill(
-                      right: 16.w,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: IconButton(
-                          onPressed: () {},
-                          style: IconButton.styleFrom(
-                            backgroundColor: AppPalette.background,
-                          ),
-                          iconSize: 18.w,
-                          icon: const Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: AppPalette.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Image.asset(
-                          'assets/images/shoes.png',
-                          width: 160.w,
-                          height: 160.h,
-                        ),
-                      ),
-                    ),
-                  ],
+                      );
+                    }
+                    return const SizedBox();
+                  },
                 ),
                 Gap(30.h),
                 Align(
