@@ -9,6 +9,7 @@ import 'package:stride_up/features/accountsetting/pages/accountsetting_page.dart
 import 'package:stride_up/features/auth/bloc/auth_bloc.dart';
 import 'package:stride_up/features/auth/pages/log_in_page.dart';
 import 'package:stride_up/features/changepass/pages/changepass_page.dart';
+import 'package:stride_up/features/profile/pages/my_shoes_page.dart';
 import '../widgets/user_header.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
@@ -85,10 +86,16 @@ class ProfilePage extends StatelessWidget {
                   color: AppPalette.textPrimary,
                 ),
               ),
-              trailing:
-                  Icon(Icons.arrow_forward_ios, color: AppPalette.primary),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: AppPalette.primary,
+              ),
               onTap: () {
-                // Chuyển đến Giỏ giày
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const MyShoesPage(),
+                  ),
+                );
               },
             ),
             ListTile(
