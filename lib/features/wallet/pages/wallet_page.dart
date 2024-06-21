@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:stride_up/core/common/widgets/navigation_menu.dart';
+import 'package:stride_up/features/wallet/pages/swap_coin_page.dart';
 import 'package:stride_up/features/wallet/repositories/wallet_repository.dart';
 import 'package:stride_up/features/wallet/widgets/coin_amount_item.dart';
 import 'package:stride_up/features/wallet/widgets/wallet_action_button.dart';
@@ -65,24 +66,27 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            'E-Wallet',
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.bold,
-            ),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        centerTitle: true,
+        title: Text(
+          'E-Wallet',
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.bold,
           ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NavigationMenu(),
-                ),
-              );
-            },
-          )),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NavigationMenu(),
+              ),
+            );
+          },
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: SingleChildScrollView(
@@ -119,6 +123,25 @@ class _WalletPageState extends State<WalletPage> {
                   ),
                 ],
               ),
+              Gap(20.h),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 8.w,
+                  vertical: 4.h,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(217, 216, 216, 1),
+                  borderRadius: BorderRadius.circular(100.r),
+                ),
+                child: Text(
+                  '#123423433453452345',
+                  style: GoogleFonts.poppins(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
               Gap(30.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -131,7 +154,13 @@ class _WalletPageState extends State<WalletPage> {
                   WalletActionButton(
                     title: 'Swap',
                     icon: MediaResource.swapIcon,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (ctx) => const SwapCoinPage(),
+                        ),
+                      );
+                    },
                   ),
                   WalletActionButton(
                     title: 'Transfer',
