@@ -82,23 +82,6 @@ class ShoesCard extends StatelessWidget {
               ],
             ),
             Gap(20.h),
-            Row(
-              children: [
-                Row(
-                  children: [
-                    SvgPicture.asset(MediaResource.coinIcon),
-                    Gap(4.w),
-                    Text(
-                      shoes.price.toString(),
-                      style: GoogleFonts.poppins(
-                        fontSize: 10.sp,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
           ],
         ),
       ),
