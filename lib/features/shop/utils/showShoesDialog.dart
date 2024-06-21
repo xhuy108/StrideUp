@@ -61,6 +61,15 @@ void showShoesDialog(BuildContext context, Shoes shoes) {
               ],
             ),
             Gap(20.h),
+            Text(
+              shoes.name,
+              style: GoogleFonts.poppins(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
+            ),
+            Gap(20.h),
             Row(
               children: [
                 ShoesInformationTag(
