@@ -16,6 +16,7 @@ class RunningReporsitory {
   RunningRecord runningRecord)async{
     try{
       DocumentReference<Map<String, dynamic>> respone = await firestore.collection(RunningRecord.COLLECTION_NAME).add(runningRecord.toJson());
+      DocumentSnapshot<Map<String, dynamic>> userData  = await firestore.collection("user").doc(auth.currentUser!.uid).get();
       return const Right(null);
     }
     catch(e){

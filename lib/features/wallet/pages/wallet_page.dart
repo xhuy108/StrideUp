@@ -55,13 +55,10 @@ class _WalletPageState extends State<WalletPage> {
       }
     });
   }
-
   double getConvertCoin(int input) {
-    double result = input / 1e18;
-    String resultString = result.toStringAsFixed(5);
-    return double.parse(resultString);
-  }
-
+      String resultString = input.toStringAsFixed(10);
+      return double.parse(resultString);
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
