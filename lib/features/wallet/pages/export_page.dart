@@ -7,7 +7,6 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/core/common/widgets/app_button.dart';
-import 'package:stride_up/core/common/widgets/navigation_menu.dart';
 import 'package:stride_up/features/wallet/pages/wallet_page.dart';
 import 'package:stride_up/features/wallet/repositories/wallet_repository.dart';
 import 'package:stride_up/features/wallet/widgets/email_verification_field.dart';
@@ -16,23 +15,25 @@ import 'package:stride_up/utils/singleton.dart';
 import 'package:stride_up/utils/wallet_provider.dart';
 
 class ExportPage extends StatefulWidget {
-  ExportPage({super.key, required this.randomSeedPharse, required this.code });
+  ExportPage({super.key, required this.randomSeedPharse, required this.code});
   List<String> randomSeedPharse;
   String code;
   @override
   State<ExportPage> createState() => _ExportPageState();
 }
-   List<T> shuffleList<T>(List<T> list) {
-    List<T> shuffledList = List<T>.from(list); // Tạo một bản sao của mảng gốc
-    final random = Random();
-    for (int i = shuffledList.length - 1; i > 0; i--) {
-      final j = random.nextInt(i + 1);
-      final temp = shuffledList[i];
-      shuffledList[i] = shuffledList[j];
-      shuffledList[j] = temp;
-    }
-    return shuffledList;
+
+List<T> shuffleList<T>(List<T> list) {
+  List<T> shuffledList = List<T>.from(list); // Tạo một bản sao của mảng gốc
+  final random = Random();
+  for (int i = shuffledList.length - 1; i > 0; i--) {
+    final j = random.nextInt(i + 1);
+    final temp = shuffledList[i];
+    shuffledList[i] = shuffledList[j];
+    shuffledList[j] = temp;
   }
+  return shuffledList;
+}
+
 class _ExportPageState extends State<ExportPage> {
   final _phraseController = TextEditingController();
   final _emailVerificationController = TextEditingController();
@@ -48,30 +49,27 @@ class _ExportPageState extends State<ExportPage> {
     'Coconut'
   ];
   List<String> selectedPhrases = [];
-  
+
   @override
   void initState() {
     super.initState();
     // Trộn ngẫu nhiên các phần tử khi khởi tạo widget
     setState(() {
       selectedPhrases = shuffleList(widget.randomSeedPharse);
-      
     });
   }
-  bool checkKeyword(){
-    String validText = "";
-    for(int i =0;i<widget.randomSeedPharse.length;i++){
-      validText = "$validText${widget.randomSeedPharse[i]} ";
 
+  bool checkKeyword() {
+    String validText = "";
+    for (int i = 0; i < widget.randomSeedPharse.length; i++) {
+      validText = "$validText${widget.randomSeedPharse[i]} ";
     }
     String text = _phraseController.text;
     return text == validText;
   }
+
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppPalette.background,
@@ -89,31 +87,31 @@ class _ExportPageState extends State<ExportPage> {
         padding: EdgeInsets.all(24.w),
         child: AppButton(
           title: 'Confirm',
-          onPressed: () async{
-            if(checkKeyword())
-            {
-            WalletRepository walletRepository = WalletRepository();
-            String mnemonic =  widget.randomSeedPharse.join(" ");
-            WalletProvider walletProvider = WalletProvider();
-            String privateKey = await walletProvider.getPrivateKey(mnemonic);
-            String publicAddress = (await walletProvider.getPublicKey(privateKey)).hex;
-            final repsoneCode = await walletRepository.createNewWallet(publicAddress,privateKey,widget.code);
-                repsoneCode.fold(
+          onPressed: () async {
+            if (checkKeyword()) {
+              WalletRepository walletRepository = WalletRepository();
+              String mnemonic = widget.randomSeedPharse.join(" ");
+              WalletProvider walletProvider = WalletProvider();
+              String privateKey = await walletProvider.getPrivateKey(mnemonic);
+              String publicAddress =
+                  (await walletProvider.getPublicKey(privateKey)).hex;
+              final repsoneCode = await walletRepository.createNewWallet(
+                  publicAddress, privateKey, widget.code);
+              repsoneCode.fold(
                 (failure) => {
-                  Singleton.instanceLogger.e("create-wallet ${failure.errorMessage}")
+                  Singleton.instanceLogger
+                      .e("create-wallet ${failure.errorMessage}")
                 },
-                (_) => {
-                },
+                (_) => {},
               );
-            
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (ctx) => const WalletPage(),
-              ),
-            );
-            }
-            else{
+
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (ctx) => const WalletPage(),
+                ),
+              );
+            } else {
               print("not right");
             }
           },
@@ -146,6 +144,10 @@ class _ExportPageState extends State<ExportPage> {
                     borderSide: const BorderSide(color: AppPalette.primary),
                     borderRadius: BorderRadius.circular(20.r),
                   ),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
                   contentPadding: EdgeInsets.all(20.w),
                   filled: true,
                   fillColor: AppPalette.textFieldBackground,
@@ -163,7 +165,8 @@ class _ExportPageState extends State<ExportPage> {
                         setState(() {
                           if (selectedPhrases.contains(phrase)) {
                             selectedPhrases.remove(phrase);
-                            _phraseController.text = "${_phraseController.text}$phrase ";
+                            _phraseController.text =
+                                "${_phraseController.text}$phrase ";
                           } else {
                             selectedPhrases.add(phrase);
                           }

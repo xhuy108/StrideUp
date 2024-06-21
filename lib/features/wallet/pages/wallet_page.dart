@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
+import 'package:stride_up/core/common/widgets/navigation_menu.dart';
 import 'package:stride_up/features/wallet/repositories/wallet_repository.dart';
 import 'package:stride_up/features/wallet/widgets/coin_amount_item.dart';
 import 'package:stride_up/features/wallet/widgets/wallet_action_button.dart';
@@ -21,55 +22,67 @@ class WalletPage extends StatefulWidget {
 
 class _WalletPageState extends State<WalletPage> {
   double zCoin = 0;
-  int zCoinOriginal = 0 ;
+  int zCoinOriginal = 0;
   double bnbCoin = 0;
-  int bnbCoinOriginal = 0 ;
+  int bnbCoinOriginal = 0;
   String address = "0x";
-  Stream<DocumentSnapshot<Map<String, dynamic>>> walletSnapshotStream = const WalletRepository().getWalletSnapshot(); 
+  Stream<DocumentSnapshot<Map<String, dynamic>>> walletSnapshotStream =
+      const WalletRepository().getWalletSnapshot();
   @override
-  void initState(){
+  void initState() {
     super.initState();
     walletSnapshotStream.listen((event) {
-      if(event.exists)
-      {
+      if (event.exists) {
         Wallet wallet = Wallet.fromJson(event.data()!);
-        if(zCoinOriginal != wallet.zCoin) {
+        if (zCoinOriginal != wallet.zCoin) {
           zCoinOriginal = wallet.zCoin;
           setState(() {
-          zCoin = getConvertCoin(wallet.zCoin);
-        });
+            zCoin = getConvertCoin(wallet.zCoin);
+          });
         }
-        if(bnbCoinOriginal!=wallet.bnbCoin){
+        if (bnbCoinOriginal != wallet.bnbCoin) {
           bnbCoinOriginal = wallet.bnbCoin;
           setState(() {
             bnbCoin = getConvertCoin(wallet.bnbCoin);
           });
         }
-        if(address!=wallet.publicAddress){
+        if (address != wallet.publicAddress) {
           setState(() {
             address = wallet.publicAddress;
           });
         }
-      } 
+      }
     });
   }
-      double getConvertCoin(int input) {
-      double result = input / 1e18;
-      String resultString = result.toStringAsFixed(5);
-      return double.parse(resultString);
-    }
+
+  double getConvertCoin(int input) {
+    double result = input / 1e18;
+    String resultString = result.toStringAsFixed(5);
+    return double.parse(resultString);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'E-Wallet',
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.bold,
+          centerTitle: true,
+          title: Text(
+            'E-Wallet',
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-      ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NavigationMenu(),
+                ),
+              );
+            },
+          )),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: SingleChildScrollView(

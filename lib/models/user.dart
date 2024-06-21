@@ -3,7 +3,7 @@ class User {
   final String name;
   final String email;
   final String walletAddress;
-  final String avatar;
+  final String image;
   final List<String>? shoes;
 
   const User({
@@ -11,7 +11,7 @@ class User {
     required this.name,
     required this.email,
     required this.walletAddress,
-    required this.avatar,
+    required this.image,
     this.shoes,
   });
 
@@ -23,7 +23,7 @@ class User {
       shoes:
           json['shoes'] != null ? List<String>.from(json['shoes']) : <String>[],
       walletAddress: json['walletAddress'],
-      avatar: json['avatar'],
+      image: json['image'],
     );
   }
 
