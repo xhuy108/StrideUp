@@ -18,8 +18,10 @@ import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:stride_up/core/constraints/map_style.dart';
 import 'package:stride_up/core/utils/typedefs.dart';
 import 'package:stride_up/features/running/repositories/running_repository.dart';
+import 'package:stride_up/features/running/utils/show_running_result.dart';
 import 'package:stride_up/features/running/widgets/running_information_item.dart';
 import 'package:stride_up/models/running_record.dart';
+import 'package:stride_up/models/shoes.dart';
 import 'package:stride_up/utils/pref_constant.dart';
 import '../../../background_service/background_location.dart';
 import '../../../utils/running_position.dart';
@@ -48,12 +50,14 @@ class _RunningPageState extends State<RunningPage> {
   Map<PolylineId, Polyline> polylines = {};
   final polylineId = PolylineId('polyline');
   CameraPosition? currentLocationCamera;
+  late Shoes currentShoes;
   StreamSubscription<Position>? _positionStreamSubscription;
   @override
   void initState() {
     super.initState();
     runningReporsitory = const RunningReporsitory();
     _listenLocationChange();
+    getCurrentShoes();
   }
   void initTimer(){
     timer = Timer.periodic(const Duration(seconds: 1), (timer) { 
@@ -63,6 +67,13 @@ class _RunningPageState extends State<RunningPage> {
       });
     });
     
+  }
+  Future<void> getCurrentShoes()async{
+    final result = await runningReporsitory.getCurrentShoes();
+    result.fold((e) {Singleton.instanceLogger.e("shoesError $e");}, (r) {
+      currentShoes = r;
+      print("currentShoes $currentShoes");
+    });
   }
 void _listenLocationChange() {
     const LocationSettings locationSettings = LocationSettings(
@@ -135,8 +146,6 @@ void _listenLocationChange() {
     return '${(distance / 1000).toDouble()} KM';
   }
 
-
-
   Future<void> generatePolylineFromPoints(
       List<LatLng> polylineCoordinates) async {
     final polyline = Polyline(
@@ -156,7 +165,7 @@ void _listenLocationChange() {
   }
   void stopRunning()async {
     RunningRecord runningRecord = RunningRecord(userId: FirebaseAuth.instance.currentUser!.uid, distanceGo: currentDistance,
-       locationGo: _route, time: timeCount, timeCreate: DateTime.now());
+       locationGo: _route, time: timeCount, timeCreate: DateTime.now(),coin: caculateMoney(currentShoes.luck, currentShoes.energy,timeCount.toDouble(), currentDistance.toDouble()));
     setState(() {
       isRunning = false;
       timer!.cancel();
@@ -174,6 +183,7 @@ void _listenLocationChange() {
 
     });
       final response = await runningReporsitory.upRunningStatus(runningRecord);
+      showRunningResultDialog(context,runningRecord);
   }
   @override
   Widget build(BuildContext context) {

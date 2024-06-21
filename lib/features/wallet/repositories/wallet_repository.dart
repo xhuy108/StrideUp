@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stride_up/core/errors/failures.dart';
 import 'package:stride_up/core/utils/typedefs.dart';
 import 'package:stride_up/models/wallet.dart';
+import "package:stride_up/models/user.dart" as userModel;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 class WalletRepository{
@@ -79,7 +80,6 @@ class WalletRepository{
         else{
           return const Right(false);
         }
-
     }
     catch(e){
               return Left(
@@ -109,6 +109,42 @@ class WalletRepository{
     }
     catch(e){
           return Left(
+        ServerFailure(
+          message: e.toString(),
+          statusCode: 500,
+        ),
+      );
+    }
+  }
+  ResultFuture<bool> checkCoin(int coin) async{
+    try{
+      final user =await firebaseFirestore.collection("user").doc(auth.currentUser!.uid).get();
+      final UserData = userModel.User.fromJson(user.data()!);
+      if(UserData.coin>coin) {
+        return const Right(true);
+      }
+      return const Right(false);
+    }
+    catch(e){
+      return Left(
+        ServerFailure(
+          message: e.toString(),
+          statusCode: 500,
+        ),
+      );
+    }
+  }
+    ResultFuture<bool> checkzCoin(int zCoin) async{
+    try{
+      final wallet =await firebaseFirestore.collection("wallet").doc(auth.currentUser!.uid).get();
+      final walletData = Wallet.fromJson(wallet.data()!);
+      if(walletData.zCoin>zCoin) {
+        return const Right(true);
+      }
+      return const Right(false);
+    }
+    catch(e){
+      return Left(
         ServerFailure(
           message: e.toString(),
           statusCode: 500,

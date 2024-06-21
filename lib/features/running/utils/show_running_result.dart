@@ -6,8 +6,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stride_up/config/themes/app_palette.dart';
 import 'package:stride_up/config/themes/media_resources.dart';
 import 'package:stride_up/features/running/widgets/running_information_item.dart';
+import 'package:stride_up/models/running_record.dart';
+  String convertTimeToString(int time) {
+    int hour = (time / 3600).floor();
+    int min = ((time - hour * 3600) / 60).floor();
+    int seconds = time - hour * 3600 - min * 60;
+    return '${hour}:${min}:${seconds}';
+  }
+    String convertRunningDistanceToString(int distance) {
+    if (distance < 1000) {
+      return '$distance M';
+    }
+    return '${(distance / 1000).toDouble()} KM';
+  }
 
-void showRunningResultDialog(BuildContext context, double distance) {
+void showRunningResultDialog(BuildContext context, RunningRecord runningRecord) {
+  DateTime currentTime = DateTime.now();
   showDialog(
     context: context,
     builder: (context) {
@@ -25,7 +39,7 @@ void showRunningResultDialog(BuildContext context, double distance) {
             ),
             Gap(24.h),
             Text(
-              distance.toString(),
+              convertRunningDistanceToString(runningRecord.distanceGo),
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w700,
                 fontSize: 28.sp,
@@ -37,16 +51,12 @@ void showRunningResultDialog(BuildContext context, double distance) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RunningInformationItem(
-                  value: '6’38’’',
-                  title: 'Time',
+                  value: "${currentTime.day}/${currentTime.month}/${currentTime.year} ${currentTime.hour}:${currentTime.minute}",
+                  title: 'Time Finish',
                 ),
                 RunningInformationItem(
-                  value: '6',
+                  value: convertTimeToString(runningRecord.time),
                   title: 'Time',
-                ),
-                RunningInformationItem(
-                  value: '410kcal',
-                  title: 'Calories',
                 ),
               ],
             ),
@@ -67,7 +77,7 @@ void showRunningResultDialog(BuildContext context, double distance) {
                     SvgPicture.asset(MediaResource.coinIcon),
                     Gap(4.w),
                     Text(
-                      '100',
+                      runningRecord.coin.toString(),
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w600,
                         fontSize: 16.sp,

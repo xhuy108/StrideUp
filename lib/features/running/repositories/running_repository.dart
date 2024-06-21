@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stride_up/core/errors/failures.dart';
 import 'package:stride_up/core/utils/typedefs.dart';
 import 'package:stride_up/models/running_record.dart';
+import 'package:stride_up/models/shoes.dart';
+import 'package:stride_up/models/user.dart' as userModel;
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -39,6 +41,25 @@ class RunningReporsitory {
       }
       return Right(listRunningRecord);
     }
+    catch(e){
+        return Left(
+        ServerFailure(
+          message: e.toString(),
+          statusCode: 500,
+        ),
+      );
+    }
+  }
+  ResultFuture<Shoes> getCurrentShoes()async{
+    try{
+      final userData = await firestore.collection("users").doc(auth.currentUser!.uid).get();
+      final userTemp = userData.data()!;
+      final user = userModel.User.fromJson(userTemp);
+      final shoesData = await firestore.collection("shoes").doc(user.currentShoes).get();
+      final currentShoe = Shoes.fromJson(shoesData);
+      return Right(currentShoe);
+    }
+    
     catch(e){
         return Left(
         ServerFailure(
