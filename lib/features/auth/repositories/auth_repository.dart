@@ -31,7 +31,9 @@ class AuthRepository {
         'phoneNumber': phoneNumber,
         'image':
             'https://res.cloudinary.com/daitxafuw/image/upload/v1718976539/avatar_pftxgl.jpg',
-        'coin': '0',
+        'coin': 0,
+        'shoes': ['0jqvltdudOFKJSTGMrE9'],
+        'currentShoes': '0jqvltdudOFKJSTGMrE9',
       });
 
       return const Right(null);
