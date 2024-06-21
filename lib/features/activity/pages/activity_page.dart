@@ -19,34 +19,40 @@ class ActivityPage extends StatefulWidget {
 }
 
 class _ActivityPageState extends State<ActivityPage> {
-  Activity activity= Activity(userId: auth.currentUser!.uid, totalDistance: 0, avgSpeed: 0, activeTime: 0, activeDateOfWeek: 0);
+  Activity activity = Activity(
+      userId: auth.currentUser!.uid,
+      totalDistance: 0,
+      avgSpeed: 0,
+      activeTime: 0,
+      activeDateOfWeek: 0);
   ActivityRepository activityRepository = ActivityRepository();
   String time = "0:0:0";
   @override
-  void initState(){
+  void initState() {
     super.initState();
     getActivity(DateTime.now());
   }
-  Future<void> getActivity(DateTime dateTime) async{
+
+  Future<void> getActivity(DateTime dateTime) async {
     final response = await activityRepository.getRecordByDate(dateTime);
-      setState(() {
+    setState(() {
       response.fold((l) {
         Singleton.instanceLogger.e("error $l");
         Fluttertoast.showToast(
-        msg: "Load activity failed",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-        );
-      } , (r) {
+            msg: "Load activity failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }, (r) {
         activity = r;
       });
-      });
+    });
   }
-   String formatActiveTime(double seconds) {
+
+  String formatActiveTime(double seconds) {
     double hours = seconds / 3600;
     double minutes = seconds / 60;
 
@@ -58,12 +64,14 @@ class _ActivityPageState extends State<ActivityPage> {
       return '${minutes.toStringAsFixed(1)} mins';
     }
   }
+
   String convertSecondsToString(double seconds) {
-  int totalSeconds = seconds.toInt();
-  int minutes = totalSeconds ~/ 60;
-  int remainingSeconds = totalSeconds % 60;
-  return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
-}
+    int totalSeconds = seconds.toInt();
+    int minutes = totalSeconds ~/ 60;
+    int remainingSeconds = totalSeconds % 60;
+    return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +90,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     SvgPicture.asset(MediaResource.calendarIcon),
                     Gap(8.w),
                     Text(
-                      'April',
+                      'June',
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
@@ -103,7 +111,7 @@ class _ActivityPageState extends State<ActivityPage> {
                 Gap(20.h),
                 EasyDateTimeLine(
                   initialDate: DateTime.now(),
-                  onDateChange: (selectedDate) async{
+                  onDateChange: (selectedDate) async {
                     await getActivity(selectedDate);
                     //`selectedDate` the new date selected.
                   },
@@ -190,7 +198,7 @@ class _ActivityPageState extends State<ActivityPage> {
                             isLargeCard: true,
                             icon: MediaResource.routeIcon,
                             iconBackgroundColor: AppPalette.primary,
-                            value: '${activity!.totalDistance/1000}',
+                            value: '${activity!.totalDistance / 1000}',
                             subtitle: 'Walking + Running Distance (km)',
                             subtitleColor: Colors.white,
                             valueColor: Colors.white,
