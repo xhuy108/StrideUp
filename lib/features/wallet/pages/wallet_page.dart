@@ -131,7 +131,7 @@ class _WalletPageState extends State<WalletPage> {
                   borderRadius: BorderRadius.circular(100.r),
                 ),
                 child: Text(
-                  '#123423433453452345',
+                  address,
                   style: GoogleFonts.poppins(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w500,

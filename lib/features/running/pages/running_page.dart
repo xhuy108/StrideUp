@@ -20,6 +20,7 @@ import 'package:stride_up/core/utils/typedefs.dart';
 import 'package:stride_up/features/running/repositories/running_repository.dart';
 import 'package:stride_up/features/running/widgets/running_information_item.dart';
 import 'package:stride_up/models/running_record.dart';
+import 'package:stride_up/models/shoes.dart';
 import 'package:stride_up/utils/pref_constant.dart';
 import '../../../background_service/background_location.dart';
 import '../../../utils/running_position.dart';
@@ -48,6 +49,7 @@ class _RunningPageState extends State<RunningPage> {
   Map<PolylineId, Polyline> polylines = {};
   final polylineId = PolylineId('polyline');
   CameraPosition? currentLocationCamera;
+  late Shoes currentShoes;
   StreamSubscription<Position>? _positionStreamSubscription;
   @override
   void initState() {
@@ -64,6 +66,9 @@ class _RunningPageState extends State<RunningPage> {
     });
     
   }
+// Future<void> getCurrentShoes()async{
+  
+// }
 void _listenLocationChange() {
     const LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
@@ -156,7 +161,7 @@ void _listenLocationChange() {
   }
   void stopRunning()async {
     RunningRecord runningRecord = RunningRecord(userId: FirebaseAuth.instance.currentUser!.uid, distanceGo: currentDistance,
-       locationGo: _route, time: timeCount, timeCreate: DateTime.now());
+       locationGo: _route, time: timeCount, timeCreate: DateTime.now(), caculateMoney());
     setState(() {
       isRunning = false;
       timer!.cancel();

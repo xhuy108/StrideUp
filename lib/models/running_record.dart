@@ -9,6 +9,7 @@ class RunningRecord {
   final int time;
   final DateTime timeCreate;
   static const String COLLECTION_NAME = "running_record";
+  final int coin;
    RunningRecord({
     this.id,
     required this.userId,
@@ -16,6 +17,7 @@ class RunningRecord {
     required this.locationGo,
     required this.time,
     required this.timeCreate,
+    required this.coin
   });
 
   factory RunningRecord.fromJson(Map<String, dynamic> json) {
@@ -26,7 +28,8 @@ class RunningRecord {
           .map((item) => LatLng(item['latitude'], item['longitude']))
           .toList(),
       time: json['time'],
-      timeCreate: (json['timeCreate'] as Timestamp).toDate()
+      timeCreate: (json['timeCreate'] as Timestamp).toDate(),
+      coin: (json["coin"] as num).toInt()
     );
   }
 
@@ -41,5 +44,6 @@ class RunningRecord {
             .toList(),
         'time': time,
         'timeCreate': Timestamp.fromDate(timeCreate),
+        "coin": coin
       };
 }
