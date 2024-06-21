@@ -15,6 +15,7 @@ import 'package:stride_up/features/auth/repositories/auth_repository.dart';
 import 'package:stride_up/features/home/bloc/home_bloc.dart';
 import 'package:stride_up/features/home/repositories/user_repository.dart';
 import 'package:stride_up/features/shop/bloc/shoes_bloc.dart';
+import 'package:stride_up/features/profile/bloc/my_shoes_bloc.dart';
 import 'package:stride_up/features/shop/repositories/shop_repository.dart';
 
 import 'package:stride_up/utils/wallet_provider.dart';
@@ -42,6 +43,11 @@ void main() async {
       BlocProvider(
         create: (_) => ShoesBloc(
           shopRepository: const ShopRepository(),
+        ),
+      ),
+      BlocProvider(
+        create: (_) => MyShoesBloc(
+          myShoesRepository: MyShoesRepository(),
         ),
       ),
       BlocProvider(
