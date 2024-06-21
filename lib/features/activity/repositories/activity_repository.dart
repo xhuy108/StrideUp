@@ -31,9 +31,7 @@ class ActivityRepository{
         }
         checkDate[record.timeCreate] = true;
       }
-
       double avgSpeed = calculateMinutesPerKilometer(totalTime,totalDistance);
-      
       Activity activity = Activity(activeDateOfWeek: checkDate.length, userId: auth.currentUser!.uid, totalDistance: totalDistance, avgSpeed: avgSpeed, activeTime: totalTime);
       return Right(activity);
     }

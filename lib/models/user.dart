@@ -5,7 +5,6 @@ class User {
   final String walletAddress;
   final String avatar;
   final List<String>? shoes;
-
   const User({
     required this.id,
     required this.name,

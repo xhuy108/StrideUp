@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +106,28 @@ void _listenLocationChange() {
     int seconds = time - hour * 3600 - min * 60;
     return '$hour:$min:$seconds';
   }
-
+  int caculateMoney(int luck, int energy, double time, double distance){
+    double totalKilometers = (energy-5)*2+ 8;
+    double kilometerDistance = (distance/1000);
+    int distanceGo = kilometerDistance>totalKilometers ? totalKilometers.toInt() : kilometerDistance.floor();
+    int initialCoin = (distanceGo/1000).floor();
+    int totalCoin = initialCoin;
+    for(int i =0;i<initialCoin;i++){
+      if(random((luck-5)*10)) {
+        totalCoin+=1;
+      }
+    }
+    return totalCoin;
+  }
+  bool random(int percentage) {
+  if (percentage < 0 || percentage > 100) {
+    throw ArgumentError('Percentage must be between 0 and 100');
+  }
+  Random rand = Random();
+  int randomValue = rand.nextInt(100); // Generates a random integer from 0 to 99
+  
+  return randomValue < percentage;
+  }
   String convertRunningDistanceToString(int distance) {
     if (distance < 1000) {
       return '$distance M';
