@@ -20,4 +20,9 @@ class UserShoesCubit extends Cubit<UserShoesState> {
       (shoes) => emit(UserShoesSuccess(shoes: shoes)),
     );
   }
+
+  void updateUserCurrentShoes(String shoesId) async {
+    print('update');
+    await userRepository.updateUserCurrentShoes(shoesId);
+  }
 }

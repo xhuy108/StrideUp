@@ -101,7 +101,7 @@ class _MyShoesPageState extends State<MyShoesPage> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 20.w,
                   mainAxisSpacing: 20.h,
-                  childAspectRatio: 0.64,
+                  childAspectRatio: 0.7,
                 ),
                 itemBuilder: (context, index) => ShoesCard(
                   shoes: state.shoes[index],

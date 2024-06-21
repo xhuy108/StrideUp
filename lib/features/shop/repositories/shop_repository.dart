@@ -13,8 +13,7 @@ class ShopRepository {
   ResultFuture<List<Shoes>> fetchShoes() async {
     try {
       final res = await FirebaseFirestore.instance.collection('shoes').get();
-      final shoesList =
-          res.docs.map((doc) => Shoes.fromJson(doc.data())).toList();
+      final shoesList = res.docs.map((doc) => Shoes.fromJson(doc)).toList();
 
       return Right(shoesList);
     } catch (e) {

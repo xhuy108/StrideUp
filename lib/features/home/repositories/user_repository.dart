@@ -44,14 +44,32 @@ class UserRepository {
                 .doc(shoeId)
                 .get();
 
-            return Shoes.fromJson(shoe.data()!);
+            return Shoes.fromJson(shoe);
           },
         ),
       );
 
-      print(shoes.length);
-
       return Right(shoes);
+    } catch (e) {
+      return Left(
+        ServerFailure(
+          message: e.toString(),
+          statusCode: 500,
+        ),
+      );
+    }
+  }
+
+  ResultFuture<void> updateUserCurrentShoes(String shoesId) async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser!.uid;
+      print('update');
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser)
+          .update({'currentShoes': shoesId});
+
+      return const Right(null);
     } catch (e) {
       return Left(
         ServerFailure(
