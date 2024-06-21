@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     initalizeRequestPermission();
   }
+
   WalletRepository walletRepository = const WalletRepository();
   Future<void> initalizeRequestPermission() async {
     await PermissionService.requestLocationPermission();
@@ -53,7 +54,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isWalletExisted = false;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -103,20 +103,24 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       children: [
                         IconButton(
-                          onPressed: ()async {
-                            final respone = await walletRepository.checkWallet();
-                            respone.fold((exception) => Singleton.instanceLogger.e("homeError: $exception"),
-                             (isWalletExisted) {
+                          onPressed: () async {
+                            final respone =
+                                await walletRepository.checkWallet();
+                            respone.fold(
+                                (exception) => Singleton.instanceLogger
+                                    .e("homeError: $exception"),
+                                (isWalletExisted) {
                               if (isWalletExisted) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const CheckPasscodePage(),
-                                ),
-                              );
-                            } else {
-                              showAddNewWalletPopUp(context);
-                            }
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CheckPasscodePage(),
+                                  ),
+                                );
+                              } else {
+                                showAddNewWalletPopUp(context);
+                              }
                             });
                           },
                           icon: SvgPicture.asset(
