@@ -121,7 +121,7 @@ void _listenLocationChange() {
     double totalKilometers = (energy-5)*2+ 8;
     double kilometerDistance = (distance/1000);
     int distanceGo = kilometerDistance>totalKilometers ? totalKilometers.toInt() : kilometerDistance.floor();
-    int initialCoin = (distanceGo/1000).floor();
+    int initialCoin = distanceGo;
     int totalCoin = initialCoin;
     for(int i =0;i<initialCoin;i++){
       if(random((luck-5)*10)) {

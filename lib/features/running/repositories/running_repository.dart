@@ -8,6 +8,7 @@ import 'package:stride_up/core/utils/typedefs.dart';
 import 'package:stride_up/models/running_record.dart';
 import 'package:stride_up/models/shoes.dart';
 import 'package:stride_up/models/user.dart' as userModel;
+import 'package:stride_up/utils/singleton.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -18,10 +19,15 @@ class RunningReporsitory {
   RunningRecord runningRecord)async{
     try{
       DocumentReference<Map<String, dynamic>> respone = await firestore.collection(RunningRecord.COLLECTION_NAME).add(runningRecord.toJson());
-      DocumentSnapshot<Map<String, dynamic>> userData  = await firestore.collection("user").doc(auth.currentUser!.uid).get();
+      DocumentSnapshot<Map<String, dynamic>> userData  = await firestore.collection("users").doc(auth.currentUser!.uid).get();
+      final user = userModel.User.fromJson(userData.data()!);
+      Map<String, dynamic> data = Map();
+      data["coin"] = user.coin + runningRecord.coin;
+      await firestore.collection("users").doc(auth.currentUser!.uid).update(data);
       return const Right(null);
     }
     catch(e){
+        Singleton.instanceLogger.e("error ${e.toString()}");
         return Left(
         ServerFailure(
           message: e.toString(),
@@ -59,7 +65,7 @@ class RunningReporsitory {
       final currentShoe = Shoes.fromJson(shoesData);
       return Right(currentShoe);
     }
-    
+
     catch(e){
         return Left(
         ServerFailure(
